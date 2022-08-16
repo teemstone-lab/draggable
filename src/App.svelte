@@ -1,9 +1,8 @@
 <script lang="ts">
+  import {onMount} from 'svelte'
+
   import Topbar from './lib/Topbar.svelte'
   import Panel from './lib/Panel.svelte'
-  import Counter from './lib/Counter.svelte'
-
-  import {onMount} from 'svelte'
   
   let items = null
   let idVal = 0
