@@ -36,7 +36,8 @@ module.exports = {
       'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       'prettier/prettier': [
          'error', { 'endOfLine': 'auto' }
-      ]
+      ],
+      
    },
    overrides: [
    {

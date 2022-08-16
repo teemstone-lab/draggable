@@ -1,45 +1,72 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+  import {onMount} from 'svelte'
+  
+  let items = null
+  let idVal = 0
+  
+
+  onMount(() => {
+    items = [{ id: idVal, text: `Item ${idVal}` }]
+    idVal+= 1 
+  });
+
+  function addDialog() {
+    if (items != null) {
+      const newTracklist = items
+      newTracklist.push({ id: idVal, text: `Item ${idVal}` })
+      items = newTracklist
+    } else {
+      items = [{ id: idVal, text: `Item ${idVal}`}]
+    }
+    idVal+= 1
+  }
 </script>
 
 <main>
   <div>
-    <a href="https://vitejs.dev" target="_blank"> 
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank"> 
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+    <button on:click={addDialog} name="btnAdd" data-testid="btnAddTest">Add</button>
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
+  <div class="list" name="dlgList">
+    {#if items != null}
+      {#each items as item, index (item.id)}
+      <div class="clsdialog" role="dialog">
+          <div class="list-item">
+            Title
+          </div>
+          <div class="contents" >
+            {item.text}
+          </div>
+      </div>
+      {/each}
+    {/if}
   </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
+  .clsdialog {
+    float: left;
+    border: 1px solid #dbdbdb;
+    /* padding: 0.5em 5em; */
+    margin: 2px;
+    resize: both;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+  .list {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+
+  .list-item {
+    display: block;
+    padding: 0.5em 2em;
+    width: 50px;
   }
-  .read-the-docs {
-    color: #888;
+
+  .contents {
+    height: 80px;
+    padding: 0.5em 2em;
+    width: 50px;
+    background-color: blanchedalmond;
   }
 </style>
