@@ -3,5 +3,9 @@ import sveltePreprocess from 'svelte-preprocess'
 export default {
   // Consult https://github.com/sveltejs/svelte-preprocess
   // for more information about preprocessors
-  preprocess: sveltePreprocess()
+  preprocess: sveltePreprocess(),
+  onwarn: (warning, handler) => {
+    if (warning.code === 'a11y-no-onchange') return
+    handler(warning)
+  }
 }
