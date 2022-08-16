@@ -1,0 +1,13 @@
+name: Test the source code in the repository
+on:
+  pull_request:
+    branches: [master]
+jobs:
+  code-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm i
+      - name: Run Jest
+        run: npm run test
