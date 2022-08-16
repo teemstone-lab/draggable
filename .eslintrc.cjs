@@ -5,8 +5,8 @@ module.exports = {
       node: true
    },
    extends: [
-      //'airbnb-base',
-      //'airbnb-typescript/base',
+      'airbnb-base',
+      'airbnb-typescript/base',
       'plugin:prettier/recommended',
       'plugin:@typescript-eslint/recommended',
       'plugin:@typescript-eslint/recommended-requiring-type-checking'
@@ -33,7 +33,10 @@ module.exports = {
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
-      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off'    
+      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+      'prettier/prettier': [
+         'error', { 'endOfLine': 'auto' }
+      ]
    },
    overrides: [
    {
