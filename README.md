@@ -1,48 +1,38 @@
-# Svelte + TS + Vite
+# Svelte Draggable Window Project
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+Svelte 언어 기반 Drag 가능한 Dialog를 구현하는 프로젝트 홈페이지로, Teemstone 내 Pair-programming 학습 프로젝트 용도로 생성된 Repository입니다.
 
-## Recommended IDE Setup
+## Reference System
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+- [React Mosaic Github](https://github.com/nomcopter/react-mosaic)
+- [React Mosaic Demo Page](https://nomcopter.github.io/react-mosaic/)
 
-## Need an official Svelte framework?
+## Reference Page
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+- [Testing-library 사용을 위한 Role 정의](https://www.w3.org/WAI/PF/HTML/wiki/RoleAttribute)
+- [Testing-library 공식 사용 문서](https://testing-library.com/docs/)
+- [Svelte 공식 사용 문서](https://svelte.dev/docs)
 
-## Technical considerations
+## 구현 필요 기능
+- TDD를 고려하지 않고 대상 프로그램의 기능 위주로 구성
+- 모든 기능을 설명한 것은 아니고 주요 기능만 설명한 것으로, 필요 시 추가 기능을 구현 권장
 
-**Why use this over SvelteKit?**
+|기능|
+|---|
+|Dialog가 배치될 공간(Panel)을 생성해야 한다.|
+|Dialog는 제목바와 본문으로 구성되어야 한다.|
+|Dialog를 추가할 수 있는 버튼이 있어야 한다.|
+|Dialog 추가 버튼을 누르면 한개의 Dialog가 추가되어야 한다.|
+|Dialog 별로 X 버튼이 있어야 한다.|
+|Dialog의 X버튼을 누르면 해당 Dialog가 닫혀야 한다.|
+|Dialog가 닫힐 때 다른 Dialog들은 닫힌 Dialog의 공간을 점유해야 한다.|
+|Dialog 별로 Split 버튼이 있어야 한다.|
+|Dialog Split 버튼을 누르면 현재의 Dialog 크기를 기준으로 <ul><li>W>H일 경우 열분할,</li><li>H>W일 경우 행분할을 해야 한다.</li></ul>|
+|Dialog 제목바에 마우스를 위치하면 이동 가능한 상태를 표시할 수 있어야 한다.|
+|Dialog 제목바를 드래그하면 위치를 이동할 수 있어야 한다.|
+|Dialog 테두리에 마우스를 위치하면 크기 변경 가능한 상태를 표시할 수 있어야 한다.|
+|Dialog 테두리를 드래그하면 크기 변경이 가능해야 한다.|
+|Dialog 크기 변경이 완료되면 주변의 다른 Dialog도 맞춰서 크기 변경이 이루어져야 한다.|
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-  `vite dev` and `vite build` wouldn't work in a SvelteKit environment, for example.
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
