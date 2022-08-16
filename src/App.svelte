@@ -1,9 +1,12 @@
 <script lang="ts">
+  import Topbar from './lib/Topbar.svelte'
+  import Panel from './lib/Panel.svelte'
+  import Counter from './lib/Counter.svelte'
+
   import {onMount} from 'svelte'
   
   let items = null
   let idVal = 0
-  
 
   onMount(() => {
     items = [{ id: idVal, text: `Item ${idVal}` }]
@@ -23,6 +26,8 @@
 </script>
 
 <main>
+  <Topbar />
+  <Panel />
   <div>
     <button on:click={addDialog} name="btnAdd" data-testid="btnAddTest">Add</button>
   </div>
@@ -41,32 +46,3 @@
     {/if}
   </div>
 </main>
-
-<style>
-  .clsdialog {
-    float: left;
-    border: 1px solid #dbdbdb;
-    /* padding: 0.5em 5em; */
-    margin: 2px;
-    resize: both;
-  }
-
-  .list {
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
-  }
-
-  .list-item {
-    display: block;
-    padding: 0.5em 2em;
-    width: 50px;
-  }
-
-  .contents {
-    height: 80px;
-    padding: 0.5em 2em;
-    width: 50px;
-    background-color: blanchedalmond;
-  }
-</style>
