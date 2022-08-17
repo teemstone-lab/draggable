@@ -25,9 +25,9 @@ test('Window Add Test', async () => {
 test('Window Del Button Create Fail Test', async () => {
   const results = render(App)
   const addBtn = results.getByTestId('btnAddTest')
-  await userEvent.click(addBtn) 
+  await userEvent.click(addBtn)
   // const DlgCnt = results.getAllByRole('dialog').length - 2
-  const delBtnCnt = results.getAllByRole('button', { name: 'X'}).length
+  const delBtnCnt = results.getAllByRole('button', { name: 'X' }).length
 
   expect(delBtnCnt).toEqual(0)
 })
@@ -36,9 +36,9 @@ test('Window Del Button Create Test', async () => {
   const results = render(App)
   const addBtn = results.getByTestId('btnAddTest')
   await userEvent.click(addBtn)
-  //const DlgCnt = results.getAllByRole('dialog').length - 1
-  const delBtnCnt = results.getAllByRole('button', { name: 'X'}).length
-  
+  // const DlgCnt = results.getAllByRole('dialog').length - 1
+  const delBtnCnt = results.getAllByRole('button', { name: 'X' }).length
+
   expect(delBtnCnt).toEqual(1)
 })
 
