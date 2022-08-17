@@ -1,9 +1,11 @@
 <script lang="ts">
   import {onMount} from 'svelte'
+
+  import Topbar from './lib/Topbar.svelte'
+  import Panel from './lib/Panel.svelte'
   
   let items = null
   let idVal = 0
-  
 
   onMount(() => {
     items = [{ id: idVal, text: `Item ${idVal}` }]
@@ -30,6 +32,8 @@
 </script>
 
 <main>
+  <Topbar />
+  <Panel />
   <div>
     <button on:click={addDialog} name="btnAdd" data-testid="btnAddTest">Add</button>
   </div>
