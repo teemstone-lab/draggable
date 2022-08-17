@@ -28,6 +28,7 @@ module.exports = {
                devDependencies: true
          }
       ],
+      'eqeqeq':'off', 
       'import/no-mutable-exports': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',

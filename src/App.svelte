@@ -20,6 +20,13 @@
     }
     idVal+= 1
   }
+
+  const remove = (item) => {
+    const newTracklist = items.filter((i) => i !== item);
+
+    items = newTracklist;
+  };
+
 </script>
 
 <main>
@@ -32,6 +39,9 @@
       <div class="clsdialog" role="dialog">
           <div class="list-item">
             Title
+            {#if item.id != 0}
+              <input type="button" on:click={() => remove(item)} class="btn_Del" role="button" value="X"/>
+            {/if}
           </div>
           <div class="contents" >
             {item.text}
@@ -46,9 +56,9 @@
   .clsdialog {
     float: left;
     border: 1px solid #dbdbdb;
-    /* padding: 0.5em 5em; */
     margin: 2px;
     resize: both;
+    width: 120px;
   }
 
   .list {
@@ -59,14 +69,21 @@
 
   .list-item {
     display: block;
-    padding: 0.5em 2em;
-    width: 50px;
+    padding: 0.5em 0em;
+    width: 100%;
   }
 
   .contents {
     height: 80px;
-    padding: 0.5em 2em;
-    width: 50px;
+    padding: 0.5em 0em;
+    width: 100%;
     background-color: blanchedalmond;
+  }
+
+  .btn_Del{
+    width: 20px;
+    height: 20px;
+    font-size: 2px;
+    float: right;
   }
 </style>
