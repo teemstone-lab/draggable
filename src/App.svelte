@@ -1,40 +1,65 @@
 <script lang="ts">
-  import {onMount} from 'svelte'
+  // import {onMount} from 'svelte'
 
   import Topbar from './lib/Topbar.svelte'
-  import Panel from './lib/Panel.svelte'
+  import SplitPane from './lib/SplitPane.svelte'
+
+  let paneObject
   
-  let items = null
-  let idVal = 0
-
-  onMount(() => {
-    items = [{ id: idVal, text: `Item ${idVal}` }]
-    idVal+= 1 
-  });
-
-  function addDialog() {
-    if (items != null) {
-      const newTracklist = items
-      newTracklist.push({ id: idVal, text: `Item ${idVal}` })
-      items = newTracklist
-    } else {
-      items = [{ id: idVal, text: `Item ${idVal}`}]
+  paneObject = {
+    type: 'h',
+    left: {
+      type: 'v',
+      top: {
+        type: 'h',
+        left: { type: 'c', text: 'Dialog1' },
+        right: { type: 'c', text: 'Dialog2' }
+      },
+      down: { type: 'c', text: 'Dialog3' }
+    },
+    right: {
+      type: 'h',
+      left: { 
+        type: 'v',
+        top: { type: 'c', text: 'Dialog4' },
+        down: { type: 'c', text: 'Dialog5' }
+      },
+      right: { type: 'c', text: 'Dialog6' }
     }
-    idVal+= 1
   }
+  // let items = null
+  // let idVal = 0
 
-  const remove = (item) => {
-    const newTracklist = items.filter((i) => i !== item);
+  // onMount(() => {
+  //   items = [{ id: idVal, text: `Item ${idVal}` }]
+  //   idVal+= 1 
+  // });
 
-    items = newTracklist;
-  };
+  // function addDialog() {
+  //   if (items != null) {
+  //     const newTracklist = items
+  //     newTracklist.push({ id: idVal, text: `Item ${idVal}` })
+  //     items = newTracklist
+  //   } else {
+  //     items = [{ id: idVal, text: `Item ${idVal}`}]
+  //   }
+  //   idVal+= 1
+  // }
+
+  // const remove = (item) => {
+  //   const newTracklist = items.filter((i) => i !== item);
+
+  //   items = newTracklist;
+  // };
 
 </script>
 
 <main>
   <Topbar />
-  <Panel />
-  <div>
+  <div class="wrapper">
+    <SplitPane {paneObject}/>
+  </div>
+  <!-- <div>
     <button on:click={addDialog} name="btnAdd" data-testid="btnAddTest">Add</button>
   </div>
   <div class="list" name="dlgList">
@@ -53,41 +78,15 @@
       </div>
       {/each}
     {/if}
-  </div>
+  </div> -->
 </main>
 
 <style>
-  .clsdialog {
-    float: left;
-    border: 1px solid #dbdbdb;
-    margin: 2px;
-    resize: both;
-    width: 120px;
-  }
-
-  .list {
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
-  }
-
-  .list-item {
+  div.wrapper {
     display: block;
-    padding: 0.5em 0em;
     width: 100%;
-  }
-
-  .contents {
-    height: 80px;
-    padding: 0.5em 0em;
-    width: 100%;
-    background-color: blanchedalmond;
-  }
-
-  .btn_Del{
-    width: 20px;
-    height: 20px;
-    font-size: 2px;
-    float: right;
-  }
+    height: 100vh;
+    margin: auto;
+    background: #ffff00;
+  }  
 </style>

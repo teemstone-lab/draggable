@@ -6,12 +6,10 @@
     <a href="https://svelte.dev" target="_blank">
         <img src={svelteLogo} alt="Svelte Logo" />
     </a>      
-    <p>123</p>
 </div>
 
 <style>
     #topbar {
-        position: fixed;
         width: 100%;
         height: 50px;
         line-height: 50px;
