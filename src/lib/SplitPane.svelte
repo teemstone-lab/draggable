@@ -9,7 +9,7 @@
     <left slot="left" role="dialog">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
-        <div role="dialog">{paneObject.left.text}</div>
+        <div role="dialog" draggable="true">{paneObject.left.text}</div>
         {:else}
         <svelte:self paneObject={paneObject.left} />
         {/if}
@@ -18,7 +18,7 @@
     <right slot="right">
     {#if paneObject.right}
         {#if paneObject.right.type === 'c'}
-        <div role="dialog">{paneObject.right.text}</div>
+        <div role="dialog" draggable="true">{paneObject.right.text}</div>
         {:else}
         <svelte:self paneObject={paneObject.right} />
         {/if}
@@ -30,7 +30,7 @@
     <top slot="top">
     {#if paneObject.top}
         {#if paneObject.top.type === 'c'}
-        <div role="dialog">{paneObject.top.text}</div>
+        <div role="dialog" draggable="true">{paneObject.top.text}</div>
         {:else}
         <svelte:self paneObject={paneObject.top} />
         {/if}
@@ -39,7 +39,7 @@
     <down slot="down">
     {#if paneObject.down}
         {#if paneObject.down.type === 'c'}
-        <div role="dialog">{paneObject.down.text}</div>
+        <div role="dialog" draggable="true">{paneObject.down.text}</div>
         {:else}
         <svelte:self paneObject={paneObject.down} />
         {/if}
