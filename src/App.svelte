@@ -118,5 +118,8 @@
     height: 100vh;
     margin: auto;
     background: #ffff00;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
   }  
 </style>
