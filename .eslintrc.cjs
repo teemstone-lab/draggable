@@ -39,7 +39,11 @@ module.exports = {
       'prettier/prettier': [
          'error', { 'endOfLine': 'auto' }
       ],
-      
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/restrict-plus-operands': 'off',
+      '@typescript-eslint/no-use-before-define': 'off',
    },
    overrides: [
    {

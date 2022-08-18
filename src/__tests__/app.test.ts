@@ -24,7 +24,7 @@ test('Window Add Test', async () => {
   const beforeCount = results.getAllByRole('dialog').length
   await userEvent.click(addBtn)
   const AfterCount = results.getAllByRole('dialog').length
-  expect(beforeCount + 1).toEqual(AfterCount)
+  expect(beforeCount + 2).toEqual(AfterCount)
 })
 
 // test('Window Add Fail Test', async () => {

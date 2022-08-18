@@ -90,12 +90,12 @@
     <SplitPane {paneObject}/>
   </div>
   <!-- <div>
-    <button on:click={addDialog} name="btnAdd" data-testid="btnAddTest">Add</button>
+    <button on:click={addDialog} name="btnAdd">Add</button>
   </div>
   <div class="list" name="dlgList">
     {#if items != null}
       {#each items as item, index (item.id)}
-      <div class="clsdialog" role="dialog">
+      <div class="clsdialog" >
           <div class="list-item">
             Title
             {#if item.id != 0}
