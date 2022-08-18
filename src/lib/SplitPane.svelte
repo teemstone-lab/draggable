@@ -1,12 +1,12 @@
 <script lange="ts">
-    import HSplitPane from './HSplitPane.svelte'
-    import VSplitPane from './VSplitPane.svelte'
+import  HSplitPane  from './HSplitPane.svelte'
+import  VSplitPane  from './VSplitPane.svelte'
   
-    export let paneObject
+export let paneObject  
 </script>
   
 {#if paneObject.type === 'h'}
-<HSplitPane>
+<HSplitPane>  
     <left slot="left" role="dialog">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
