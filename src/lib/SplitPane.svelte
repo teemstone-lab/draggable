@@ -1,5 +1,6 @@
 <script lange="ts">
-    import { HSplitPane, VSplitPane } from 'svelte-split-pane'
+    import HSplitPane from './HSplitPane.svelte'
+    import VSplitPane from './VSplitPane.svelte'
   
     export let paneObject
 </script>
