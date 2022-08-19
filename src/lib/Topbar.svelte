@@ -1,25 +1,21 @@
 <script lang="ts">
+    import {createEventDispatcher } from 'svelte'
     import svelteLogo from '../assets/svelte.svg'
+
+    const dispatch = createEventDispatcher()
+
+    function addDialog() {
+        dispatch('addDialog')
+    }
 </script>
 
-<div id="topbar">
-    <a href="https://svelte.dev" target="_blank">
-        <img src={svelteLogo} alt="Svelte Logo" />
-    </a>      
+<div class="topbar">
+    <div class="topbar_elements">
+        <a href="https://svelte.dev" target="_blank">
+            <img src={svelteLogo} alt="Svelte Logo" />
+        </a>      
+    </div>
+    <div class="topbar_elements">
+        <input type="button" value="Win Add" on:click={addDialog} data-testid="btnAddTest"/>
+    </div>
 </div>
-
-<style>
-    #topbar {
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        color: white;
-        background: #334433;
-        font-weight: 600;
-        place-items: center;
-        padding: 0 10px 0 10px;
-        display: inline-block;
-        vertical-align: middle;
-    }
-</style>
-
