@@ -1,24 +1,23 @@
 <script lange="ts">
 import {createEventDispatcher } from 'svelte'
 
-export let title
-export let text
+export let paneObject
 
 const dispatch = createEventDispatcher()
 
 function closeWindow() {
-    dispatch('closeWindow', { id: title })
+    dispatch('closeWindow', { id: paneObject.title })
 }
 </script>
 
 <div role="dialog" draggable="true" class="pane">
     <div class="pane_topbar">
-        <div>{title}</div>
+        <div>{paneObject.title}</div>
         <div><button on:click={closeWindow} class="closed">X</button></div>        
     </div>
     <div class="pane_container">
         <div class="pane_content">
-            <h1>{text}</h1>
+            <h1>{paneObject.text}</h1>
         </div>
     </div>
 </div>

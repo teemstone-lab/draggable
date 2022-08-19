@@ -51,18 +51,13 @@
 		
 		paneObject = paneObject
   }
-
-  function closeWindow(e) {
-    const windowId = e.detail.id
-    console.log(windowId)
-  }  
 </script>
 
 <main>
   <Topbar on:addDialog={addDialog}/>
   <div class="wrapper">
     <div class="pane_root">
-      <SplitPane {paneObject} on:closeWindow={closeWindow} />
+      <SplitPane bind:paneObject={paneObject} />
     </div>    
   </div>
 </main>
