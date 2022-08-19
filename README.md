@@ -19,9 +19,9 @@ Svelte 언어 기반 Drag 가능한 Dialog를 구현하는 프로젝트 홈페�
 
 |기능|구현 여부|
 |---|---|
-|Dialog가 배치될 공간(Panel)을 생성해야 한다.|O|
-|Dialog를 추가할 수 있는 버튼이 있어야 한다.|X|
-|Dialog 추가 버튼을 누르면 한개의 Dialog가 추가되어야 한다.|X|
+|Dialog가 배치될 공간(Panel)을 생성해야 한다.|#9|
+|Dialog를 추가할 수 있는 버튼이 있어야 한다.|#11|
+|Dialog 추가 버튼을 누르면 한개의 Dialog가 추가되어야 한다.|#11|
 |Dialog 별로 X 버튼이 있어야 한다.|X|
 |Dialog의 X버튼을 누르면 해당 Dialog가 닫혀야 한다.|X|
 |Dialog가 닫힐 때 다른 Dialog들은 닫힌 Dialog의 공간을 점유해야 한다.|X|
