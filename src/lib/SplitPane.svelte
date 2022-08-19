@@ -30,7 +30,7 @@ function closeWindow(e) {
   
 {#if paneObject.type === 'h'}
 <HSplitPane>  
-    <left slot="left" role="dialog">
+    <left slot="left">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
         <Dialog paneObject={paneObject.left} on:closeWindow={closeWindow}/>

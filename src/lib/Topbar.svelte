@@ -16,6 +16,6 @@
         </a>      
     </div>
     <div class="topbar_elements">
-        <input type="button" value="Win Add" on:click={addDialog} data-testid="btnAddTest"/>
+        <input type="button" value="Dialog Add" on:click={addDialog} data-testid="btnAddTest"/>
     </div>
 </div>
