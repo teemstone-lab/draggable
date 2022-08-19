@@ -1,7 +1,7 @@
 <script lang="ts">
    import {onMount} from 'svelte'
 
-  import Topbar from './lib/Topbar.svelte'
+  import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
 
   let paneObject
