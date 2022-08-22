@@ -51,13 +51,18 @@
 		
 		paneObject = paneObject
   }
+
+  function divisionWindow(e) {
+    const windowId = e.detail.id
+    console.log('divisionWindow  ' + windowId)
+}
 </script>
 
 <main>
   <Topbar on:addDialog={addDialog}/>
   <div class="wrapper">
     <div class="pane_root">
-      <SplitPane bind:paneObject={paneObject} />
+      <SplitPane bind:paneObject={paneObject} on:divWindow={divisionWindow} bind:maxNum={LastNum} />
     </div>    
   </div>
 </main>
