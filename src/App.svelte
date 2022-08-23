@@ -1,5 +1,5 @@
 <script lang="ts">
-   import {onMount} from 'svelte'
+  import {onMount} from 'svelte'
 
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
@@ -7,6 +7,7 @@
   let paneObject
   let LastPanaType = 'v'
   let LastNum : number
+
 
   onMount(() => {
     LastNum = 4
@@ -47,22 +48,16 @@
 			RigtheTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`}
 		}
 		LastPanaType = RigtheTopWindow.type
-		LastNum += 1
-		
-		paneObject = paneObject
+		LastNum += 1	
+    paneObject = paneObject
   }
-
-  function divisionWindow(e) {
-    const windowId = e.detail.id
-    console.log('divisionWindow  ' + windowId)
-}
 </script>
 
 <main>
   <Topbar on:addDialog={addDialog}/>
   <div class="wrapper">
     <div class="pane_root">
-      <SplitPane bind:paneObject={paneObject} on:divWindow={divisionWindow} bind:maxNum={LastNum} />
+      <SplitPane bind:paneObject  bind:LastNum/>
     </div>    
   </div>
 </main>
