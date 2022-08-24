@@ -8,6 +8,7 @@
   let LastPanaType = 'v'
   let LastNum : number
 
+
   onMount(() => {
     LastNum = 4
   });
@@ -47,9 +48,8 @@
 			RigtheTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 		}
 		LastPanaType = RigtheTopWindow.type
-		LastNum += 1
-		
-		paneObject = paneObject
+		LastNum += 1	
+    paneObject = paneObject
   }
 </script>
 
@@ -57,7 +57,7 @@
   <Topbar on:addDialog={addDialog} />
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
-      <SplitPane bind:paneObject />
+      <SplitPane bind:paneObject  bind:LastNum/>
     </div>    
   </div>
 </main>

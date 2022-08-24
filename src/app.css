@@ -134,3 +134,9 @@ button.closed {
   border: 0;
   cursor: pointer;
 }
+
+button.division{
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
