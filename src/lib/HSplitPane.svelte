@@ -108,6 +108,34 @@
         min-width: var(--min-right-panel-size);
         height: 100%;
     }
+
+    .shadow {
+        visibility: hidden;
+        z-index: 99;
+        position: absolute;
+    }
+    .sh-left {
+        width: 50%;
+        height: 100%;
+        background: rgba(100, 100, 255, 0.3);
+    }
+    .sh-right {
+        width: 50%;
+        height: 100%;
+        left: 50%;
+        background: rgba(100, 255, 100, 0.3);
+    }
+    .sh-top {
+        width: 100%;
+        height: 50%;
+        background: rgba(255, 100, 100, 0.3);
+    }
+    .sh-down {
+        width: 100%;
+        height: 50%;
+        top: 50%;
+        background: rgba(100, 100, 100, 0.3);
+    }    
 </style>
 
 <div class="wrapper" style="--left-panel-size: {leftPaneSize}; --right-panel-size: {rightPaneSize}; --min-left-panel-size: {minLeftPaneSize}; --min-right-panel-size: {minRightPaneSize};">
@@ -127,4 +155,8 @@
             </div>
         </slot>
     </div>
+    <div class="shadow sh-left" />
+    <div class="shadow sh-right" />
+    <div class="shadow sh-top" />
+    <div class="shadow sh-down" />       
 </div>

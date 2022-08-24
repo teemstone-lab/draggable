@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {createEventDispatcher } from 'svelte'
-    import svelteLogo from '../assets/svelte.svg'
+  import {createEventDispatcher } from 'svelte'
+  import svelteLogo from '../assets/svelte.svg'
 
-    const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher()
 
-    function addDialog() {
-        dispatch('addDialog')
-    }
+  function addDialog() {
+    dispatch('addDialog')
+  }
 </script>
 
 <div class="topbar">
