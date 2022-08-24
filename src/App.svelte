@@ -1,5 +1,5 @@
 <script lang="ts">
-   import {onMount} from 'svelte'
+  import {onMount} from 'svelte'
 
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
@@ -7,6 +7,10 @@
   let paneObject
   let LastPanaType = 'v'
   let LastNum : number
+  let controlVars = {
+    hovering: '',
+    targetPane: ''
+  }
 
   onMount(() => {
     LastNum = 4
@@ -14,11 +18,11 @@
 
   paneObject = {
     type: 'h',
-    left: { type: 'c', text: 'Dialog 1', title: 'Dialog 1' },
+    left: { type: 'c', text: 'Dialog 1', title: 'Dialog 1', id: 'd1' },
     right: {
       type: 'v',
-      top: {type: 'c', text: 'Dialog 2', title: 'Dialog 2'},
-      down: { type: 'c', text: 'Dialog 3', title: 'Dialog 3' }
+      top: {type: 'c', text: 'Dialog 2', title: 'Dialog 2', id: 'd2'},
+      down: { type: 'c', text: 'Dialog 3', title: 'Dialog 3', id: 'd3' }
     }
   }
 
@@ -39,25 +43,45 @@
 		if(LastPanaType == 'h'){
 			RigtheTopWindow.type = 'v'
 			RigtheTopWindow.top = {type: 'c', text: RigtheTopWindow.text, title: RigtheTopWindow.text}
-			RigtheTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`}
+			RigtheTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 			
 		}else{
 			RigtheTopWindow.type = 'h'
 			RigtheTopWindow.left = {type: 'c', text: RigtheTopWindow.text, title: RigtheTopWindow.text}
-			RigtheTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`}
+			RigtheTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 		}
 		LastPanaType = RigtheTopWindow.type
 		LastNum += 1
 		
 		paneObject = paneObject
   }
+
+  function handleDragOver(e) {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'move'
+      //console.log(mouseX, mouseY, dialogWidth, dialogHeight)
+  }
+
+  function handleDragDrop(e) {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (controlVars.hovering === '') return
+
+      controlVars.hovering = ''
+      controlVars.targetPane = ''
+  }
 </script>
 
 <main>
-  <Topbar on:addDialog={addDialog}/>
-  <div class="wrapper">
-    <div class="pane_root">
-      <SplitPane bind:paneObject={paneObject} />
+  <Topbar on:addDialog={addDialog} {controlVars}/>
+  <div id="pane_wrapper" class="wrapper">
+    <div 
+      class="pane_root"
+      on:dragover={(e) => handleDragOver(e)}
+      on:drop={(e) => handleDragDrop(e)}
+    >
+      <SplitPane bind:paneObject bind:controlVars />
     </div>    
   </div>
 </main>

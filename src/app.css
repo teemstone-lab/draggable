@@ -44,6 +44,7 @@ div.topbar {
   width: 100%;
   padding: 0 15px;
   position: relative;
+  z-index: 1000;
 }
 
 div.topbar_elements {
@@ -75,6 +76,14 @@ div.pane_root {
 
 div.pane_root > * {
   box-sizing: border-box;
+}
+
+section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 }
 
 div.pane {

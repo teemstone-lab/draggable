@@ -1,12 +1,13 @@
 <script lang="ts">
-    import {createEventDispatcher } from 'svelte'
-    import svelteLogo from '../assets/svelte.svg'
+  import {createEventDispatcher } from 'svelte'
+  import svelteLogo from '../assets/svelte.svg'
 
-    const dispatch = createEventDispatcher()
+  export let controlVars
+  const dispatch = createEventDispatcher()
 
-    function addDialog() {
-        dispatch('addDialog')
-    }
+  function addDialog() {
+    dispatch('addDialog')
+  }
 </script>
 
 <div class="topbar">
@@ -17,5 +18,11 @@
     </div>
     <div class="topbar_elements">
         <input type="button" value="Dialog Add" on:click={addDialog} data-testid="btnAddTest"/>
+    </div>
+    <div class="topbar_elements">
+        {controlVars.hovering}
+    </div>
+    <div class="topbar_elements">
+        {controlVars.targetPane}
     </div>
 </div>

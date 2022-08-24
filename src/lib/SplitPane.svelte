@@ -3,7 +3,8 @@ import HSplitPane from './HSplitPane.svelte'
 import VSplitPane from './VSplitPane.svelte'
 import Dialog from './Dialog.svelte'
   
-export let paneObject  
+export let paneObject
+export let controlVars
 
 function closeWindow(e) {
     const windowId = e.detail.id
@@ -33,18 +34,18 @@ function closeWindow(e) {
     <left slot="left">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
-        <Dialog paneObject={paneObject.left} on:closeWindow={closeWindow}/>
+        <Dialog paneObject={paneObject.left} bind:controlVars on:closeWindow={closeWindow}/>
         {:else}
-        <svelte:self bind:paneObject={paneObject.left} />
+        <svelte:self bind:paneObject={paneObject.left} bind:controlVars />
         {/if}
     {/if}
     </left>
     <right slot="right">
     {#if paneObject.right}
         {#if paneObject.right.type === 'c'}
-        <Dialog paneObject={paneObject.right} on:closeWindow={closeWindow} />
+        <Dialog paneObject={paneObject.right} bind:controlVars on:closeWindow={closeWindow} />
         {:else}
-        <svelte:self bind:paneObject={paneObject.right} />
+        <svelte:self bind:paneObject={paneObject.right} bind:controlVars />
         {/if}
     {/if}
     </right>
@@ -54,24 +55,24 @@ function closeWindow(e) {
     <top slot="top">
     {#if paneObject.top}
         {#if paneObject.top.type === 'c'}
-        <Dialog paneObject={paneObject.top} on:closeWindow={closeWindow} />
+        <Dialog paneObject={paneObject.top} bind:controlVars on:closeWindow={closeWindow} />
         {:else}
-        <svelte:self bind:paneObject={paneObject.top} />
+        <svelte:self bind:paneObject={paneObject.top} bind:controlVars />
         {/if}
     {/if}
     </top>
     <down slot="down">
     {#if paneObject.down}
         {#if paneObject.down.type === 'c'}
-        <Dialog paneObject={paneObject.down} on:closeWindow={closeWindow} />
+        <Dialog paneObject={paneObject.down} bind:controlVars on:closeWindow={closeWindow} />
         {:else}
-        <svelte:self bind:paneObject={paneObject.down} />
+        <svelte:self bind:paneObject={paneObject.down} bind:controlVars />
         {/if}
     {/if}
     </down>
 </VSplitPane>
 {:else}
-<Dialog paneObject={paneObject} on:closeWindow={closeWindow} />
+<Dialog bind:paneObject bind:controlVars on:closeWindow={closeWindow} />
 {/if}
 
 <style>
