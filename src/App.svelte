@@ -36,18 +36,18 @@
 	}
 
 	function addDialog() {
-		const RigtheTopWindow = getRightTopWindow(paneObject)
+		const RightTopWindow = getRightTopWindow(paneObject)
 		if(LastPanaType == 'h'){
-			RigtheTopWindow.type = 'v'
-			RigtheTopWindow.top = {type: 'c', text: RigtheTopWindow.text, title: RigtheTopWindow.text}
-			RigtheTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
+			RightTopWindow.type = 'v'
+			RightTopWindow.top = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
+			RightTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 			
 		}else{
-			RigtheTopWindow.type = 'h'
-			RigtheTopWindow.left = {type: 'c', text: RigtheTopWindow.text, title: RigtheTopWindow.text}
-			RigtheTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
+			RightTopWindow.type = 'h'
+			RightTopWindow.left = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
+			RightTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 		}
-		LastPanaType = RigtheTopWindow.type
+		LastPanaType = RightTopWindow.type
 		LastNum += 1	
     paneObject = paneObject
   }
@@ -57,7 +57,7 @@
   <Topbar on:addDialog={addDialog} />
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
-      <SplitPane bind:paneObject  bind:LastNum/>
+      <SplitPane bind:paneObject bind:LastNum />
     </div>    
   </div>
 </main>
