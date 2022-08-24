@@ -7,10 +7,6 @@
   let paneObject
   let LastPanaType = 'v'
   let LastNum : number
-  let controlVars = {
-    hovering: '',
-    targetPane: ''
-  }
 
   onMount(() => {
     LastNum = 4
@@ -55,33 +51,13 @@
 		
 		paneObject = paneObject
   }
-
-  function handleDragOver(e) {
-      e.preventDefault()
-      e.dataTransfer.dropEffect = 'move'
-      //console.log(mouseX, mouseY, dialogWidth, dialogHeight)
-  }
-
-  function handleDragDrop(e) {
-      e.preventDefault()
-      e.stopPropagation()
-
-      if (controlVars.hovering === '') return
-
-      controlVars.hovering = ''
-      controlVars.targetPane = ''
-  }
 </script>
 
 <main>
-  <Topbar on:addDialog={addDialog} {controlVars}/>
+  <Topbar on:addDialog={addDialog} />
   <div id="pane_wrapper" class="wrapper">
-    <div 
-      class="pane_root"
-      on:dragover={(e) => handleDragOver(e)}
-      on:drop={(e) => handleDragDrop(e)}
-    >
-      <SplitPane bind:paneObject bind:controlVars />
+    <div class="pane_root">
+      <SplitPane bind:paneObject />
     </div>    
   </div>
 </main>

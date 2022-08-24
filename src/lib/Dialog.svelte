@@ -6,7 +6,7 @@ import {flip} from 'svelte/animate'
 import { createEventDispatcher } from 'svelte'
 
 export let paneObject
-export let controlVars
+// export let controlVars
 
 let mouseX
 let mouseY
