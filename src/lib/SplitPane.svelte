@@ -13,15 +13,15 @@ function closeWindow(e) {
         if (paneObject.type === 'c') {
         console.log('No longer window deletion is allowed.')
         } else if (paneObject.type === 'h') {
-            if (paneObject.left.type === 'c' && paneObject.left.id === windowId) {
+            if (paneObject.left.id === windowId) {
                 paneObject = paneObject.right
-            } else if (paneObject.right.type === 'c' && paneObject.right.id === windowId) {
+            } else if (paneObject.right.id === windowId) {
                 paneObject = paneObject.left
             }
         } else if (paneObject.type === 'v') {
-            if (paneObject.top.type === 'c' && paneObject.top.id === windowId) {
+            if (paneObject.top.id === windowId) {
                 paneObject = paneObject.down
-            } else if (paneObject.down.type === 'c' && paneObject.down.id === windowId) {
+            } else if (paneObject.down.id === windowId) {
                 paneObject = paneObject.top
             }
         }
@@ -42,7 +42,7 @@ function closeWindow(e) {
             }
             LastNum += 1
         } else if (paneObject.type === 'h') {
-            if (paneObject.left.type === 'c' && paneObject.left.id === windowId) {
+            if (paneObject.left.id === windowId) {
 
                 if(dlgWidth >= dlgHeight){
                     paneObject.left.type = 'h'
@@ -54,7 +54,7 @@ function closeWindow(e) {
                     paneObject.left.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
                 }
                 
-            } else if (paneObject.right.type === 'c' && paneObject.right.id === windowId) {
+            } else if (paneObject.right.id === windowId) {
                 if(dlgWidth >= dlgHeight){
                     paneObject.right.type = 'h'
                     paneObject.right.left = {type: 'c', text: paneObject.right.text, title: paneObject.right.title, id: paneObject.right.id}
@@ -67,7 +67,7 @@ function closeWindow(e) {
             }
             LastNum += 1
         } else if (paneObject.type === 'v') {
-            if (paneObject.top.type === 'c' && paneObject.top.id === windowId) {
+            if (paneObject.top.id === windowId) {
                 // console.log('Top Window.  LastNum == ' + LastNum)
                 if(dlgWidth >= dlgHeight){
                     paneObject.top.type = 'h'
@@ -92,11 +92,18 @@ function closeWindow(e) {
                 }
             }
             LastNum += 1
-        }
-        
+        }        
     }
-    
 }
+
+function updateWindow(e) {
+    const { items, id } = e.detail
+
+    if (paneObject.type === 'h') {
+
+    }
+}
+
 </script>
 
 {#if paneObject.type === 'h'}
@@ -104,7 +111,7 @@ function closeWindow(e) {
     <left slot="left">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
-        <Dialog paneObject={paneObject.left} on:closeWindow={closeWindow}/>
+        <Dialog paneObject={paneObject.left} on:closeWindow={closeWindow} on:updateWindow={updateWindow} />
         {:else}
         <svelte:self bind:paneObject={paneObject.left} bind:LastNum />
         {/if}
@@ -113,7 +120,7 @@ function closeWindow(e) {
     <right slot="right">
     {#if paneObject.right}
         {#if paneObject.right.type === 'c'}
-        <Dialog paneObject={paneObject.right} on:closeWindow={closeWindow}/>
+        <Dialog paneObject={paneObject.right} on:closeWindow={closeWindow} on:updateWindow={updateWindow} />
         {:else}
         <svelte:self bind:paneObject={paneObject.right} bind:LastNum />
         {/if}
@@ -125,7 +132,7 @@ function closeWindow(e) {
     <top slot="top">
     {#if paneObject.top}
         {#if paneObject.top.type === 'c'}
-        <Dialog paneObject={paneObject.top} on:closeWindow={closeWindow}/>
+        <Dialog paneObject={paneObject.top} on:closeWindow={closeWindow} on:updateWindow={updateWindow} />
         {:else}
         <svelte:self bind:paneObject={paneObject.top} bind:LastNum />
         {/if}
@@ -134,7 +141,7 @@ function closeWindow(e) {
     <down slot="down">
     {#if paneObject.down}
         {#if paneObject.down.type === 'c'}
-        <Dialog paneObject={paneObject.down} on:closeWindow={closeWindow} />
+        <Dialog paneObject={paneObject.down} on:closeWindow={closeWindow} on:updateWindow={updateWindow} />
         {:else}
         <svelte:self bind:paneObject={paneObject.down} bind:LastNum />
         {/if}
@@ -142,7 +149,7 @@ function closeWindow(e) {
     </down>
 </VSplitPane>
 {:else}
-<Dialog bind:paneObject on:closeWindow={closeWindow} />
+<Dialog bind:paneObject on:closeWindow={closeWindow} on:updateWindow={updateWindow} />
 {/if}
 
 <style>

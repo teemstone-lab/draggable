@@ -5,12 +5,6 @@ import { createEventDispatcher } from 'svelte'
 
 export let paneObject
 
-// let mouseX
-// let mouseY
-// let dialogWidth
-// let dialogHeight
-// let dragObject
-// let dragTarget
 let dlgHeight
 let dlgWdith
 
@@ -27,26 +21,17 @@ function divisionWindow() {
     dispatch('closeWindow', { id: paneObject.id, val:1, Height:dlgHeight, Width:dlgWdith  })
 }
 
-// function handleDragStart(e) {
-//     controlVars.hovering = paneObject.title
-//     e.dataTransfer.effectAllowed = 'move'
-//     e.dataTransfer.setDragImage(dragTarget, 0, 0)
-//     console.log(e.currentTarget)
-//     console.log(e)
-//     //closeWindow()
-// }
+function handleConsider(e) {    
+    items = e.detail.items
+}
 
-// function handleDragEnter(e) {
-//     controlVars.targetPane = paneObject.title
-//     e.preventDefault()
-// }
-
-function handleSort(e) {
-    items = e.detail.items;
+function handleFinalize(e) {
+    items = e.detail.items    
+    dispatch('updateWindow', { items: items, id: paneObject.id })
 }
 </script>
 
-<section use:dndzone={{items, flipDurationMs}} on:consider={handleSort} on:finalize={handleSort}>
+<section use:dndzone={{items, flipDurationMs}} on:consider={handleConsider} on:finalize={handleFinalize}>
 {#each items as item (item.id)}
 <div class="pane" name="dlgname" bind:clientHeight={dlgHeight} bind:clientWidth={dlgWdith} animate:flip={{duration:flipDurationMs}}>
     <div class="pane_topbar">
