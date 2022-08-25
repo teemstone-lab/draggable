@@ -30,6 +30,7 @@ module.exports = {
       ],
       'eqeqeq':'off', 
       'import/no-mutable-exports': 'off',
+      'no-lonely-if': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',

@@ -34,7 +34,7 @@ function closeCallback(e) {
 }
 
 function divisionCallback(e) {
-    let currentObj = { ...paneObject }
+    const currentObj = { ...paneObject }
     const childObj = e.detail.obj
     const childBatch = e.detail.batch
     const { dlgWidth, dlgHeight } = e.detail
@@ -42,7 +42,7 @@ function divisionCallback(e) {
 
     if (e.detail.flag) {
         // Dialog
-        const id = childObj.id
+        const {id} = childObj
         if (currentObj.type === 'c') {
             if (dlgWidth >= dlgHeight) {
                 currentObj.left = { ...currentObj }
@@ -117,7 +117,7 @@ function divisionCallback(e) {
     dispatch('divisionCallback', { obj: { ...currentObj }, flag: false, dlgHeight, dlgWidth, batch})
 }
 
-function updateCallback(e) {
+function updateCallback() {
     // const { id, items, dlgWidth, dlgHeight } = e.detail
 
     // if (items.length > 1) dispatch('divisionCallback', { id, dlgWidth, dlgHeight, dialog1:{...items[0]}, dialog2:{...items[1]} })
