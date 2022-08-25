@@ -4,6 +4,7 @@ import {flip} from 'svelte/animate'
 import { createEventDispatcher } from 'svelte'
 
 export let paneObject
+export let batch
 
 let dlgHeight
 let dlgWidth
@@ -14,11 +15,11 @@ let items = [ paneObject ]
 const dispatch = createEventDispatcher()
 
 function closeCallback() {
-    dispatch('closeCallback', { id: paneObject.id })
+    dispatch('closeCallback', { obj: { ...paneObject }, flag: true, batch })
 }
 
 function divisionCallback() {
-    dispatch('divisionCallback', { id: paneObject.id, dlgHeight, dlgWidth })
+    dispatch('divisionCallback', { obj: { ...paneObject }, flag: true, dlgHeight, dlgWidth, batch })
 }
 
 function handleConsider(e) {
@@ -27,7 +28,7 @@ function handleConsider(e) {
 
 function handleFinalize(e) {
     items = e.detail.items    
-    dispatch('updateWindow', { id: paneObject.id, items, dlgHeight, dlgWidth })
+    dispatch('updateCallback', { id: paneObject.id, items, dlgHeight, dlgWidth })
 }
 </script>
 
@@ -46,43 +47,3 @@ function handleFinalize(e) {
 </div>
 {/each}
 </section>
-<!-- <div
-  role="dialog"
-  class="pane"
-  on:dragenter={(e) => handleDragEnter(e)}
-  bind:clientWidth={dialogWidth}
-  bind:clientHeight={dialogHeight}
-  bind:this={dragTarget}
-  class:is-active={controlVars.targetPane === paneObject.title}
->
-    <div
-      class="pane_topbar"
-      draggable="true"
-      bind:this={dragObject}
-      on:dragstart={(e) => handleDragStart(e)}    
-    >
-        <div>{paneObject.title}</div>
-        <div><button on:click={divisionCallback} class="division">Div</button><button on:click={closeCallback} class="closed">X</button></div>        
-    </div>
-    <div class="pane_container">
-        <div class="pane_content">
-            <h1>{paneObject.text}</h1>
-        </div>
-    </div>
-</div> -->
-
-<!-- <div class="shadow"></div> -->
-<style>
-    /* .pane.is-active > .shadow {
-        visibility: visible;
-    }
-
-    .pane > .shadow {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: rgba(100, 100, 255, 0.3);
-        z-index: 99;
-        visibility: hidden;
-    } */
-</style>
