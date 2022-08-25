@@ -6,37 +6,37 @@ import { createEventDispatcher } from 'svelte'
 export let paneObject
 
 let dlgHeight
-let dlgWdith
+let dlgWidth
 
 const flipDurationMs = 200
 let items = [ paneObject ]
 
 const dispatch = createEventDispatcher()
 
-function closeWindow() {
-    dispatch('closeWindow', { id: paneObject.id, val:0  })
+function closeCallback() {
+    dispatch('closeCallback', { id: paneObject.id })
 }
 
-function divisionWindow() {
-    dispatch('closeWindow', { id: paneObject.id, val:1, Height:dlgHeight, Width:dlgWdith  })
+function divisionCallback() {
+    dispatch('divisionCallback', { id: paneObject.id, dlgHeight, dlgWidth })
 }
 
-function handleConsider(e) {    
+function handleConsider(e) {
     items = e.detail.items
 }
 
 function handleFinalize(e) {
     items = e.detail.items    
-    dispatch('updateWindow', { items: items, id: paneObject.id })
+    dispatch('updateWindow', { id: paneObject.id, items, dlgHeight, dlgWidth })
 }
 </script>
 
 <section use:dndzone={{items, flipDurationMs}} on:consider={handleConsider} on:finalize={handleFinalize}>
 {#each items as item (item.id)}
-<div class="pane" name="dlgname" bind:clientHeight={dlgHeight} bind:clientWidth={dlgWdith} animate:flip={{duration:flipDurationMs}}>
+<div class="pane" name="dlgname" bind:clientHeight={dlgHeight} bind:clientWidth={dlgWidth} animate:flip={{duration:flipDurationMs}}>
     <div class="pane_topbar">
         <div>{item.title}</div>
-        <div><button on:click={divisionWindow} class="division">Div</button><button on:click={closeWindow} class="closed">X</button></div>        
+        <div><button on:click={divisionCallback} class="division">Div</button><button on:click={closeCallback} class="closed">X</button></div>        
     </div>
     <div class="pane_container">
         <div class="pane_content">
@@ -62,7 +62,7 @@ function handleFinalize(e) {
       on:dragstart={(e) => handleDragStart(e)}    
     >
         <div>{paneObject.title}</div>
-        <div><button on:click={divisionWindow} class="division">Div</button><button on:click={closeWindow} class="closed">X</button></div>        
+        <div><button on:click={divisionCallback} class="division">Div</button><button on:click={closeCallback} class="closed">X</button></div>        
     </div>
     <div class="pane_container">
         <div class="pane_content">
