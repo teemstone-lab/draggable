@@ -1,63 +1,66 @@
 <script lang="ts">
-  import {onMount} from 'svelte'
-
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
+  import { getItemsFromServer, saveItemsToServer } from './lib/server'
 
-  let paneObject
+  let paneObject = getItemsFromServer()
   let LastPanaType = 'v'
-  let LastNum : number
+  let LastNum = 4
 
-
-  onMount(() => {
-    LastNum = 4
-  });
-
-  paneObject = {
-    type: 'h',
-    left: { type: 'c', text: 'Dialog 1', title: 'Dialog 1', id: 'd1' },
-    right: {
-      type: 'v',
-      top: {type: 'c', text: 'Dialog 2', title: 'Dialog 2', id: 'd2'},
-      down: { type: 'c', text: 'Dialog 3', title: 'Dialog 3', id: 'd3' }
-    }
-  }
-
-  function getRightTopWindow(SpliteObject){
+  function getRightTopWindow(SplitObject){
 		let ReturnValue;
-		if(SpliteObject.type == 'c'){
-			ReturnValue = SpliteObject
-		}else if(SpliteObject.type == 'h'){
-   				ReturnValue = getRightTopWindow(SpliteObject.right)
-   			}else{
-   				ReturnValue = getRightTopWindow(SpliteObject.top)
-   			}
+		if (SplitObject.type == 'c') {
+			ReturnValue = SplitObject
+		} else if(SplitObject.type == 'h') {
+			ReturnValue = getRightTopWindow(SplitObject.right)
+		} else {
+      ReturnValue = getRightTopWindow(SplitObject.top)
+    }
 		return ReturnValue
 	}
 
-	function addDialog() {
-		const RightTopWindow = getRightTopWindow(paneObject)
-		if(LastPanaType == 'h'){
+	async function addDialog() {
+    const newObject = await getItemsFromServer()
+
+		const RightTopWindow = getRightTopWindow(newObject)
+		if (LastPanaType == 'h') {
 			RightTopWindow.type = 'v'
 			RightTopWindow.top = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
 			RightTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 			
-		}else{
+		} else {
 			RightTopWindow.type = 'h'
 			RightTopWindow.left = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
 			RightTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 		}
 		LastPanaType = RightTopWindow.type
-		LastNum += 1	
-    paneObject = paneObject
+		LastNum += 1
+
+    await saveItemsToServer(newObject)    
+  }
+
+  async function updateElement(e) {
+    const { obj } = e.detail
+    paneObject = obj
+    await saveItemsToServer(obj)
   }
 </script>
 
 <main>
-  <Topbar on:addDialog={addDialog} />
+  {#await paneObject}
+  <h1>Fetching objects..</h1>
+  {:then paneObject}
+  <Topbar {addDialog} />
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
-      <SplitPane bind:paneObject bind:LastNum />
+      <SplitPane 
+        {paneObject}
+        batch="all"
+        on:closeCallback={updateElement} 
+        on:divisionCallback={updateElement}
+        bind:LastNum  
+      />
     </div>    
   </div>
+  {/await}
 </main>

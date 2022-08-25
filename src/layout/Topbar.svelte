@@ -1,12 +1,7 @@
 <script lang="ts">
-  import {createEventDispatcher } from 'svelte'
   import svelteLogo from '../assets/svelte.svg'
-
-  const dispatch = createEventDispatcher()
-
-  function addDialog() {
-    dispatch('addDialog')
-  }
+  
+  export let addDialog
 </script>
 
 <div class="topbar">
