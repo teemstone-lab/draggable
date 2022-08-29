@@ -26,6 +26,6 @@ Svelte 언어 기반 Drag 가능한 Dialog를 구현하는 프로젝트 홈페�
 |Dialog Split 버튼을 누르면 현재의 Dialog 크기를 기준으로 <ul><li>W>H일 경우 열분할,</li><li>H>W일 경우 행분할을 해야 한다.</li></ul>|[#20](https://github.com/teemstone-lab/draggable/issues/20)|
 |Dialog 제목바를 드래그하면 위치를 이동할 수 있어야 한다.|X|
 |Dialog 크기 변경이 완료되면 주변의 다른 Dialog도 맞춰서 크기 변경이 이루어져야 한다.|X|
-
-
+|현재 Dialog를 저장할 수 있는 기능이 구현되어야 한다.|X|
+|Dialog를 동적으로 여러 개 저장할 수 있는 기능이 구현되어야 한다.|X|
 
