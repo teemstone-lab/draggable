@@ -42,7 +42,7 @@ function divisionCallback(e) {
 
     if (e.detail.flag) {
         // Dialog
-        const {id} = childObj
+        const {id} = childObj 
         if (childBatch === 'all') {
             if (dlgWidth >= dlgHeight) {
                 currentObj.left = { ...currentObj }

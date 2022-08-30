@@ -1,11 +1,21 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
-  import { getItemsFromServer, saveItemsToServer } from './lib/server'
+  import { getItemsFromServer, saveItemsToServer, savePattern, loadPattern} from './lib/server'
 
   let paneObject = getItemsFromServer()
   let LastPanaType = 'v'
   let LastNum = 4
+  let SessionNum 
+
+  onMount(() => {
+    if(localStorage.length === 0){
+      SessionNum = 0;
+    }else{
+      SessionNum = localStorage.length;
+    }
+  })
 
   function getRightTopWindow(SplitObject){
 		let ReturnValue;
@@ -36,7 +46,13 @@
 		LastPanaType = RightTopWindow.type
 		LastNum += 1
 
-    await saveItemsToServer(newObject)    
+    await saveItemsToServer(newObject)      
+  }
+
+  async function fnsavePattern() {
+    await savePattern(paneObject, SessionNum)
+    SessionNum += 1
+    paneObject = getItemsFromServer()
   }
 
   async function updateElement(e) {
@@ -44,13 +60,17 @@
     paneObject = obj
     await saveItemsToServer(obj)
   }
+
+  function fnloadPattern(key) {
+    paneObject = loadPattern(key)
+  }
 </script>
 
 <main>
   {#await paneObject}
   <h1>Fetching objects..</h1>
   {:then paneObject}
-  <Topbar {addDialog} />
+  <Topbar {addDialog} {fnloadPattern} {fnsavePattern}/>
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
       <SplitPane 

@@ -10,6 +10,25 @@ let serverItems = {
   }
 }
 
+export function loadPattern(key) {
+  return new Promise((resolve) => {
+    window.setTimeout(() => {
+      const PatternData = JSON.parse(localStorage.getItem(key))
+      serverItems = { ...PatternData }
+      resolve(PatternData)
+    }, NETWORK_DELAY_MS)
+  })
+}
+
+export function savePattern(newItems, SessionNum) {
+  return new Promise((resolve) => {
+    window.setTimeout(() => {
+      localStorage.setItem(`pattern${SessionNum}`, JSON.stringify(serverItems))
+      resolve(serverItems)
+    }, NETWORK_DELAY_MS)
+  })
+}
+
 export function saveItemsToServer(newItems) {
   return new Promise((resolve) => {
     window.setTimeout(() => {
