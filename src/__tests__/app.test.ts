@@ -30,3 +30,15 @@ test('Dialog Delete Test', async () => {
   const afterCount = afterObjs.length
   expect(beforeCount - 1).toEqual(afterCount)
 })
+
+test('Pattern Add Localstorage', async () => {
+  const results = render(App)
+
+  const addBtn = await results.findByTestId('btnAddPattern')
+  const BtnBefore = await results.findAllByRole('button')
+  let beforeCount = BtnBefore.length;
+  await userEvent.click(addBtn)
+  const BtnAfter = await results.findAllByRole('button')
+  const afterCount = BtnAfter.length;
+  expect(beforeCount).toEqual(afterCount)
+})
