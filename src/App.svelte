@@ -1,17 +1,20 @@
 <script lang="ts">
+  import { afterUpdate } from 'svelte';
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
   import { getItemsFromServer, saveItemsToServer } from './lib/server'
 
   let paneObject = getItemsFromServer()
+  let tempPaneObject = getItemsFromServer()
   let LastPanaType = 'v'
   let LastNum = 4
 
   function getRightTopWindow(SplitObject){
-		let ReturnValue;
+		let ReturnValue
+    
 		if (SplitObject.type == 'c') {
 			ReturnValue = SplitObject
-		} else if(SplitObject.type == 'h') {
+		} else if (SplitObject.type == 'h') {
 			ReturnValue = getRightTopWindow(SplitObject.right)
 		} else {
       ReturnValue = getRightTopWindow(SplitObject.top)
@@ -35,29 +38,44 @@
 		}
 		LastPanaType = RightTopWindow.type
 		LastNum += 1
-
+    
     await saveItemsToServer(newObject)    
+    paneObject = newObject
   }
 
-  async function updateElement(e) {
-    const { obj } = e.detail
-    paneObject = obj
+  async function handleUpdate(e) {
+    const { obj, completion } = e.detail
     await saveItemsToServer(obj)
+
+    paneObject = obj
+    if (completion) tempPaneObject = { ...obj }
+  }
+
+  async function handleDrag(e) {
+    const { obj, completion } = e.detail
+
+    if (completion) {
+      await saveItemsToServer(obj)
+      paneObject = obj
+      tempPaneObject = { ...obj }
+    } else {
+      // Rollback
+      paneObject = tempPaneObject
+    }
   }
 </script>
 
 <main>
-  {#await paneObject}
-  <h1>Fetching objects..</h1>
-  {:then paneObject}
+  {#await paneObject then promiseObject}
   <Topbar {addDialog} />
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
-      <SplitPane 
-        {paneObject}
+      <SplitPane
+        paneObject={promiseObject}
         batch="all"
-        on:closeCallback={updateElement} 
-        on:divisionCallback={updateElement}
+        on:closeCallback={handleUpdate} 
+        on:divisionCallback={handleUpdate}
+        on:dragCallback={handleDrag}
         bind:LastNum  
       />
     </div>    
