@@ -23,7 +23,7 @@
     <div class="topbar_elements">
         <input type="button" value="Dialog Add" on:click={addDialog} data-testid="btnAddTest"/>
         &nbsp&nbsp&nbsp|  &nbsp&nbsp Pattern &nbsp
-        <input type="button" value="Save" on:click={fnsavePattern}/>
+        <input type="button" value="Save" on:click={fnsavePattern} data-testid="btnAddPattern"/>
         &nbsp
         {#each PatternList as item, idx (item.num)}
             <input type="button" value={item.num} on:click={fnloadPattern(item.key)}/>
