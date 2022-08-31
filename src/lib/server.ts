@@ -31,7 +31,7 @@ export function savePattern(newItems, SessionNum) {
 
 export function saveItemsToServer(newItems) {
   return new Promise((resolve) => {
-    window.setTimeout(() => {
+    setTimeout(() => {
       serverItems = { ...newItems }
       resolve(newItems)
     }, NETWORK_DELAY_MS)
@@ -40,7 +40,7 @@ export function saveItemsToServer(newItems) {
 
 export function getItemsFromServer() {
   return new Promise((resolve) => {
-    window.setTimeout(() => {
+    setTimeout(() => {
       resolve({ ...serverItems })
     }, NETWORK_DELAY_MS)
   })

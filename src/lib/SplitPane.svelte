@@ -1,4 +1,4 @@
-<script lange="ts">
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 
 import HSplitPane from './HSplitPane.svelte'
@@ -15,6 +15,7 @@ function closeCallback(e) {
     let currentObj = { ...paneObject }
     const childBatch = e.detail.batch
     const childObj = e.detail.obj
+    const { completion } = e.detail    
 
     if (e.detail.flag) {
         // Dialog
@@ -30,75 +31,42 @@ function closeCallback(e) {
         else if (childBatch === "top") currentObj.top = { ...childObj }
         else if (childBatch === "down") currentObj.down = { ...childObj }
     }
-    dispatch('closeCallback', { obj: { ...currentObj }, flag: false, batch })
+    dispatch('closeCallback', { obj: { ...currentObj }, flag: false, completion, batch })
 }
 
 function divisionCallback(e) {
     const currentObj = { ...paneObject }
     const childObj = e.detail.obj
     const childBatch = e.detail.batch
-    const { dlgWidth, dlgHeight } = e.detail
+    const { dlgWidth, dlgHeight, completion } = e.detail
     const newDialog = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
+    let targetObj
 
     if (e.detail.flag) {
         // Dialog
-        const {id} = childObj 
         if (childBatch === 'all') {
-            if (dlgWidth >= dlgHeight) {
-                currentObj.left = { ...currentObj }
-                currentObj.right = newDialog
-                currentObj.type = 'h'
-            } else {
-                currentObj.top = { ...currentObj }
-                currentObj.down = newDialog
-                currentObj.type = 'v'
-            }
-            delete currentObj.id
+            targetObj = currentObj
         } else if (childBatch === "left") {
-            if (dlgWidth >= dlgHeight) {
-                currentObj.left.left = { ...currentObj.left }
-                currentObj.left.right = newDialog
-                currentObj.left.type = 'h'
-            } else {
-                currentObj.left.top = { ...currentObj.left }
-                currentObj.left.down = newDialog
-                currentObj.left.type = 'v'
-            }
-            delete currentObj.left.id
+            targetObj = currentObj.left
         } else if (childBatch === "right") {
-            if (dlgWidth >= dlgHeight) {
-                currentObj.right.left = { ...currentObj.right }
-                currentObj.right.right = newDialog
-                currentObj.right.type = 'h'
-            } else {
-                currentObj.right.top = { ...currentObj.right }
-                currentObj.right.down = newDialog
-                currentObj.right.type = 'v'
-            }
-            delete currentObj.right.id
+            targetObj = currentObj.right
         } else if (childBatch === "top") {
-            if (dlgWidth >= dlgHeight) {
-                currentObj.top.left = { ...currentObj.top }
-                currentObj.top.right = newDialog
-                currentObj.top.type = 'h'
-            } else {
-                currentObj.top.top = { ...currentObj.top }
-                currentObj.top.down = newDialog
-                currentObj.top.type = 'v'
-            }
-            delete currentObj.top.id
+            targetObj = currentObj.top
         } else if (childBatch === "down") {
-            if (dlgWidth >= dlgHeight) {
-                currentObj.down.left = { ...currentObj.down }
-                currentObj.down.right = newDialog
-                currentObj.down.type = 'h'
-            } else {
-                currentObj.down.top = { ...currentObj.down }
-                currentObj.down.down = newDialog
-                currentObj.down.type = 'v'
-            }
-            delete currentObj.down.id
-        }                
+            targetObj = currentObj.down
+        }
+
+        if (dlgWidth >= dlgHeight) {
+            targetObj.left = { ...targetObj }
+            targetObj.right = newDialog
+            targetObj.type = 'h'
+        } else {
+            targetObj.top = { ...targetObj }
+            targetObj.down = newDialog
+            targetObj.type = 'v'
+        }
+        delete targetObj.id
+
         LastNum += 1
     } else {
         // SplitPane
@@ -107,14 +75,64 @@ function divisionCallback(e) {
         else if (childBatch === "top") currentObj.top = { ...childObj }
         else if (childBatch === "down") currentObj.down = { ...childObj }
     }
-    dispatch('divisionCallback', { obj: { ...currentObj }, flag: false, dlgHeight, dlgWidth, batch})
+    dispatch('divisionCallback', { obj: { ...currentObj }, flag: false, dlgHeight, dlgWidth, completion, batch})
 }
 
-function updateCallback() {
-    // const { id, items, dlgWidth, dlgHeight } = e.detail
+function dragCallback(e) {
+    const currentObj = { ...paneObject }
+    const childBatch = e.detail.batch
+    const childObj = e.detail.obj
+    let {completion} = e.detail
+    let targetObj
 
-    // if (items.length > 1) dispatch('divisionCallback', { id, dlgWidth, dlgHeight, dialog1:{...items[0]}, dialog2:{...items[1]} })
-    // else if (items.length === 0) dispatch('closeCallback', { id })
+    if (e.detail.flag) {
+        const { currentState } = e.detail
+
+        // Dialog
+        if (childBatch === 'all') {
+            targetObj = currentObj
+        } else if (childBatch === "left") {
+            targetObj = currentObj.left
+        } else if (childBatch === "right") {
+            targetObj = currentObj.right
+        } else if (childBatch === "top") {
+            targetObj = currentObj.top
+        } else if (childBatch === "down") {
+            targetObj = currentObj.down
+        }
+
+        if (currentState === 'none') {
+            completion = false
+        } else if (currentState === 'left') {
+            targetObj.left = childObj
+            targetObj.right = { ...targetObj }
+            targetObj.type = 'h'
+            delete targetObj.id
+        } else if (currentState === 'right') {
+            targetObj.left = { ...targetObj }
+            targetObj.right = childObj
+            targetObj.type = 'h'
+            delete targetObj.id
+        } else if (currentState === 'top') {
+            targetObj.top = childObj
+            targetObj.down = { ...targetObj }
+            targetObj.type = 'v'
+            delete targetObj.id
+        } else if (currentState === 'down') {
+            targetObj.top = { ...targetObj }
+            targetObj.down = childObj
+            targetObj.type = 'v'
+            delete targetObj.id
+        }
+    } else {
+        // SplitPane
+        if (childBatch === "left") currentObj.left = { ...childObj }
+        else if (childBatch === "right") currentObj.right = { ...childObj }
+        else if (childBatch === "top") currentObj.top = { ...childObj }
+        else if (childBatch === "down") currentObj.down = { ...childObj }
+    }
+    dispatch('dragCallback', { obj: { ...currentObj }, flag: false, completion, batch})
+
 }
 
 </script>
@@ -124,18 +142,18 @@ function updateCallback() {
     <left slot="left">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
-        <Dialog paneObject={paneObject.left} batch="left" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:updateCallback={updateCallback} />
+        <Dialog paneObject={paneObject.left} batch="left" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:dragCallback={dragCallback} />
         {:else}
-        <svelte:self paneObject={paneObject.left} batch="left" on:closeCallback={closeCallback} bind:LastNum />
+        <svelte:self paneObject={paneObject.left} batch="left" on:divisionCallback={divisionCallback} on:closeCallback={closeCallback} on:dragCallback={dragCallback} bind:LastNum />
         {/if}
     {/if}
     </left>
     <right slot="right">
     {#if paneObject.right}
         {#if paneObject.right.type === 'c'}
-        <Dialog paneObject={paneObject.right} batch="right" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:updateCallback={updateCallback} />
+        <Dialog paneObject={paneObject.right} batch="right" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:dragCallback={dragCallback} />
         {:else}
-        <svelte:self paneObject={paneObject.right} batch="right" on:closeCallback={closeCallback} bind:LastNum />
+        <svelte:self paneObject={paneObject.right} batch="right" on:divisionCallback={divisionCallback} on:closeCallback={closeCallback} on:dragCallback={dragCallback} bind:LastNum />
         {/if}
     {/if}
     </right>
@@ -145,24 +163,24 @@ function updateCallback() {
     <top slot="top">
     {#if paneObject.top}
         {#if paneObject.top.type === 'c'}
-        <Dialog paneObject={paneObject.top} batch="top" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:updateCallback={updateCallback} />
+        <Dialog paneObject={paneObject.top} batch="top" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:dragCallback={dragCallback} />
         {:else}
-        <svelte:self paneObject={paneObject.top} batch="top" on:closeCallback={closeCallback} bind:LastNum />
+        <svelte:self paneObject={paneObject.top} batch="top" on:divisionCallback={divisionCallback} on:closeCallback={closeCallback} on:dragCallback={dragCallback} bind:LastNum />
         {/if}
     {/if}
     </top>
     <down slot="down">
     {#if paneObject.down}
         {#if paneObject.down.type === 'c'}
-        <Dialog paneObject={paneObject.down} batch="down" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:updateCallback={updateCallback} />
+        <Dialog paneObject={paneObject.down} batch="down" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:dragCallback={dragCallback} />
         {:else}
-        <svelte:self paneObject={paneObject.down} batch="down" on:closeCallback={closeCallback} bind:LastNum />
+        <svelte:self paneObject={paneObject.down} batch="down" on:divisionCallback={divisionCallback} on:closeCallback={closeCallback} on:dragCallback={dragCallback} bind:LastNum />
         {/if}
     {/if}
     </down>
 </VSplitPane>
 {:else}
-<Dialog bind:paneObject batch="all" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:updateCallback={updateCallback} />
+<Dialog bind:paneObject batch="all" on:closeCallback={closeCallback} on:divisionCallback={divisionCallback} on:dragCallback={dragCallback} />
 {/if}
 
 <style>

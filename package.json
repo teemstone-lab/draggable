@@ -37,7 +37,6 @@
     "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.49.0",
     "svelte-check": "^2.8.0",
-    "svelte-dnd-action": "^0.9.19",
     "svelte-jester": "^2.3.2",
     "svelte-preprocess": "^4.10.7",
     "ts-jest": "^28.0.8",
