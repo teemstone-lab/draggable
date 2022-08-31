@@ -41,11 +41,13 @@ test('Pattern Add Localstorage', async () => {
   const results = render(App)
 
   const addBtn = await results.findByTestId('btnAddPattern')
-  const BtnBefore = await results.findAllByRole('button')
+  const BtnBefore = results.getAllByRole('button')
   const beforeCount = BtnBefore.length
+
   await userEvent.click(addBtn)
   await new Promise((resolve) => setTimeout(resolve, 1000))
-  const BtnAfter = await results.findAllByRole('button')
+
+  const BtnAfter = results.getAllByRole('button')
   const afterCount = BtnAfter.length
-  expect(beforeCount).toEqual(afterCount)
+  expect(beforeCount + 1).toEqual(afterCount)
 })
