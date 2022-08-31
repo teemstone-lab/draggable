@@ -1,4 +1,4 @@
-<script lange="ts">
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 
 import HSplitPane from './HSplitPane.svelte'
@@ -82,7 +82,7 @@ function dragCallback(e) {
     const currentObj = { ...paneObject }
     const childBatch = e.detail.batch
     const childObj = e.detail.obj
-    let completion = e.detail.completion
+    let {completion} = e.detail
     let targetObj
 
     if (e.detail.flag) {

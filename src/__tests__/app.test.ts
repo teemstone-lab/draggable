@@ -1,32 +1,38 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/svelte'
+import { render, screen } from '@testing-library/svelte'
 import App from '../App.svelte'
 
 test('페이지 로드 시 SplitPane이 생성되어 있어야 함', () => {
-  const results = render(App)
-  expect(results.findAllByRole('listitem')).toBeTruthy()
+  render(App)
+  expect(screen.findAllByRole('dialog')).toBeTruthy()
 })
 
-test('Dialog Add Test(Code modification is needed)', async () => {
-  const results = render(App)
+test('Dialog Add Test', async () => {
+  render(App)
 
-  const addBtn = await results.findByTestId('btnAddTest')
-  const beforeObjs = await results.findAllByRole('listitem')
+  const addBtn = await screen.findByTestId('btnAddTest')
+  const beforeObjs = screen.getAllByRole('dialog')
   const beforeCount = beforeObjs.length
+
   await userEvent.click(addBtn)
-  const afterObjs = await results.findAllByRole('listitem')
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const afterObjs = screen.getAllByRole('dialog')
   const afterCount = afterObjs.length
-  expect(beforeCount).toEqual(afterCount)
+  expect(beforeCount + 1).toEqual(afterCount)
 })
 
 test('Dialog Delete Test', async () => {
-  const results = render(App)
+  render(App)
 
-  const target = await results.findAllByRole('button', { name: 'X' })
-  const beforeObjs = await results.findAllByRole('listitem')
+  const target = await screen.findAllByRole('button', { name: 'X' })
+  const beforeObjs = screen.getAllByRole('dialog')
   const beforeCount = beforeObjs.length
+
   await userEvent.click(target[0])
-  const afterObjs = await results.findAllByRole('listitem')
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const afterObjs = screen.getAllByRole('dialog')
   const afterCount = afterObjs.length
   expect(beforeCount - 1).toEqual(afterCount)
 })

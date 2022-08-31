@@ -1,4 +1,4 @@
-<script lange="ts">
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 
 export let paneObject
@@ -7,10 +7,9 @@ export let batch
 let dlgHeight
 let dlgWidth
 let dlgObject
+let shadowAxis
 let entryCount = 0
 let currentState = 'none'
-
-const flipDurationMs = 200
 
 const dispatch = createEventDispatcher()
 
@@ -37,7 +36,7 @@ function handleDrop(e) {
 
 function handleDragEnter(e) {
     e.preventDefault()
-    entryCount++
+    entryCount += 1
 
     if (entryCount === 1) {
         setShadowState(e.layerX, e.layerY)
@@ -46,7 +45,7 @@ function handleDragEnter(e) {
 
 function handleDragLeave(e) {
     e.preventDefault()
-    entryCount--
+    entryCount -= 1
 
     if (entryCount === 0) {
         currentState = 'none'
@@ -104,6 +103,7 @@ $: shadowAxis = setShadowAxis(currentState)
 </script>
 
 <div 
+  role="dialog"
   class="pane"
   name="dlgname"
   bind:this={dlgObject}
