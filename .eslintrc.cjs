@@ -11,7 +11,7 @@ module.exports = {
       'plugin:@typescript-eslint/recommended',
       'plugin:@typescript-eslint/recommended-requiring-type-checking'
    ],
-   ignorePatterns: ['docs/','.eslintrc.*', 'vite.config.*', 'svelte.config.*'],
+   ignorePatterns: ['assets/','.eslintrc.*', 'vite.config.*', 'svelte.config.*'],
    parser: '@typescript-eslint/parser',
    parserOptions: {
       ecmaVersion: 13,
