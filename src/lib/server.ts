@@ -2,9 +2,11 @@ const NETWORK_DELAY_MS = 100
 
 let serverItems = {
   type: 'h',
+  axis: ['50%', '50%'],
   left: { type: 'c', text: 'Dialog 1', title: 'Dialog 1', id: 'd1' },
   right: {
     type: 'v',
+    axis: ['50%', '50%'],
     top: { type: 'c', text: 'Dialog 2', title: 'Dialog 2', id: 'd2' },
     down: { type: 'c', text: 'Dialog 3', title: 'Dialog 3', id: 'd3' }
   }

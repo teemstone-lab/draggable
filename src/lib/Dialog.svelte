@@ -14,24 +14,24 @@ let currentState = 'none'
 const dispatch = createEventDispatcher()
 
 function closeCallback() {
-    dispatch('closeCallback', { obj: { ...paneObject }, flag: true, completion: true, batch })
+    dispatch('closeCallback', { obj: { ...paneObject }, completion: true, batch })
 }
 
 function divisionCallback() {
-    dispatch('divisionCallback', { obj: { ...paneObject }, flag: true, dlgHeight, dlgWidth, completion: true, batch })
+    dispatch('divisionCallback', { obj: { ...paneObject }, dlgHeight, dlgWidth, completion: true, batch })
 }
 
 function handleDragStart(e) {
     e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.setDragImage(dlgObject, 0, 0)
     e.dataTransfer.setData("text/plain", JSON.stringify(paneObject))
-    dispatch('closeCallback', { obj: { ...paneObject }, flag: true, completion: false, batch })
+    dispatch('closeCallback', { obj: { ...paneObject }, completion: false, batch })
 }
 
 function handleDrop(e) {
     e.preventDefault()
     const obj = JSON.parse(e.dataTransfer.getData("text/plain"))
-    dispatch('dragCallback', { obj, flag: true, currentState, completion: true, batch})
+    dispatch('dragCallback', { obj, currentState, completion: true, batch})
 }
 
 function handleDragEnter(e) {

@@ -37,11 +37,13 @@
 		const RightTopWindow = getRightTopWindow(newObject)
 		if (LastPanaType == 'h') {
 			RightTopWindow.type = 'v'
+      RightTopWindow.axis = ['50%', '50%']
 			RightTopWindow.top = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
 			RightTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 			
 		} else {
 			RightTopWindow.type = 'h'
+      RightTopWindow.axis = ['50%', '50%']
 			RightTopWindow.left = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
 			RightTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 		}
@@ -59,24 +61,21 @@
   }
 
   async function handleUpdate(e) {
-    const { obj, completion } = e.detail
-    await saveItemsToServer(obj)
-
-    paneObject = obj
-    if (completion) tempPaneObject = { ...obj }
-  }
-
-  async function handleDrag(e) {
-    const { obj, completion } = e.detail
+    const { obj, completion, source } = e.detail
 
     if (completion) {
       await saveItemsToServer(obj)
       paneObject = obj
       tempPaneObject = { ...obj }
-    } else {
+    } else if (source === "Close") {
+      await saveItemsToServer(obj)
+      paneObject = obj
+    } else if (source === "Drag") {
       // Rollback
       paneObject = tempPaneObject
     }
+
+    console.log(paneObject)
   }
 
   function fnloadPattern(key) {
@@ -92,9 +91,7 @@
       <SplitPane
         paneObject={promiseObject}
         batch="all"
-        on:closeCallback={handleUpdate} 
-        on:divisionCallback={handleUpdate}
-        on:dragCallback={handleDrag}
+        on:paneUpdateCallback={handleUpdate} 
         bind:LastNum  
       />
     </div>    
