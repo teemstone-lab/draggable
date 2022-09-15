@@ -2,7 +2,7 @@
     import { onMount, onDestroy } from 'svelte';
     
     let separator;
-    export let updateCallback = () => {
+    export let updateCallback = (_a1, _a2) => {
         // do nothing
         
     }
@@ -41,7 +41,7 @@
         separator.style.left = `${md.offsetLeft + delta.x  }px`;
         left.style.width = `${md.firstWidth + delta.x  }px`;
         right.style.width = `${md.secondWidth - delta.x  }px`;
-        updateCallback();
+        // updateCallback(left.style.width, right.style.width);
     }
     const onMouseUpWrapper = (e) => {
         onMouseUp();
@@ -49,7 +49,7 @@
             e.preventDefault();
             if (e.button !== 0) return;
         }
-        updateCallback();
+        updateCallback(left.style.width, right.style.width);
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUpWrapper);
         window.removeEventListener('touchmove', onMouseMove);
@@ -99,46 +99,18 @@
         background-position: center;
     }
     div.left {
-        width: var(--left-panel-size);
-        min-width: var(--min-left-panel-size);
+        width: var(--left-pane-size);
+        min-width: var(--min-left-pane-size);
         height: 100%;
     }
     div.right {
-        width: var(--right-panel-size);
-        min-width: var(--min-right-panel-size);
+        width: var(--right-pane-size);
+        min-width: var(--min-right-pane-size);
         height: 100%;
-    }
-
-    .shadow {
-        visibility: hidden;
-        z-index: 99;
-        position: absolute;
-    }
-    .sh-left {
-        width: 50%;
-        height: 100%;
-        background: rgba(100, 100, 255, 0.3);
-    }
-    .sh-right {
-        width: 50%;
-        height: 100%;
-        left: 50%;
-        background: rgba(100, 255, 100, 0.3);
-    }
-    .sh-top {
-        width: 100%;
-        height: 50%;
-        background: rgba(255, 100, 100, 0.3);
-    }
-    .sh-down {
-        width: 100%;
-        height: 50%;
-        top: 50%;
-        background: rgba(100, 100, 100, 0.3);
     }    
 </style>
 
-<div class="wrapper" style="--left-panel-size: {leftPaneSize}; --right-panel-size: {rightPaneSize}; --min-left-panel-size: {minLeftPaneSize}; --min-right-panel-size: {minRightPaneSize};">
+<div class="wrapper" style="--left-pane-size: {leftPaneSize}; --right-pane-size: {rightPaneSize}; --min-left-pane-size: {minLeftPaneSize}; --min-right-pane-size: {minRightPaneSize};">
     <div bind:this={left} class="left">
         <slot name="left">
             <div style="background-color: red;">

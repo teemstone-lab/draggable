@@ -2,7 +2,7 @@
     import { onMount, onDestroy } from 'svelte';
     
     let separator;
-    export let updateCallback = () => {
+    export let updateCallback = (_a1, _a2) => {
         // do nothing
         
     }
@@ -43,7 +43,7 @@
         separator.style.top = `${md.offsetTop + delta.y  }px`;
         top.style.height = `${md.firstHeight + delta.y  }px`;
         down.style.height = `${md.secondHeight - delta.y  }px`;
-        updateCallback();
+        // updateCallback();
     }
     const onMouseUpWrapper = (e) => {
         onMouseUp();
@@ -51,7 +51,7 @@
             e.preventDefault();
             if (e.button !== 0) return;
         }
-        updateCallback();
+        updateCallback(top.style.height, down.style.height);
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUpWrapper);
         window.removeEventListener('touchmove', onMouseMove);
@@ -73,12 +73,12 @@
         window.removeEventListener('resize', onResize);
     });
     let top; let down;
-    export let topPanelSize = '50%';
-    export let downPanelSize = '50%';
+    export let topPaneSize = '50%';
+    export let downPaneSize = '50%';
     export let minTopPaneSize = '0';
     export let minDownPaneSize = '0';
-    $: topPanelSize && resetSize();
-    $: downPanelSize && resetSize();
+    $: topPaneSize && resetSize();
+    $: downPaneSize && resetSize();
 </script>
 
 <style>
@@ -98,48 +98,18 @@
         background-color: #aaa;
     }
     div.top {
-        height: var(--top-panel-size);
-        min-height: var(--min-top-panel-size);
+        height: var(--top-pane-size);
+        min-height: var(--min-top-pane-size);
         width: 100%;
     }
     div.down {
-        height: var(--down-panel-size);
-        min-height: var(--min-down-panel-size);
+        height: var(--down-pane-size);
+        min-height: var(--min-down-pane-size);
         width: 100%;
     }
-
-    
-    .shadow {
-        visibility: hidden;
-        z-index: 99;
-        position: absolute;
-    }
-    .sh-left {
-        width: 50%;
-        height: 100%;
-        background: rgba(100, 100, 255, 0.3);
-    }
-    .sh-right {
-        width: 50%;
-        height: 100%;
-        left: 50%;
-        background: rgba(100, 255, 100, 0.3);
-    }
-    .sh-top {
-        width: 100%;
-        height: 50%;
-        background: rgba(255, 100, 100, 0.3);
-    }
-    .sh-down {
-        width: 100%;
-        height: 50%;
-        top: 50%;
-        background: rgba(100, 100, 100, 0.3);
-    }
-
 </style>
 
-<div class="wrapper" style="--top-panel-size: {topPanelSize}; --down-panel-size: {downPanelSize}; --min-top-panel-size:{minTopPaneSize}; --min-down-panel-size: {minDownPaneSize};">
+<div class="wrapper" style="--top-pane-size: {topPaneSize}; --down-pane-size: {downPaneSize}; --min-top-pane-size:{minTopPaneSize}; --min-down-pane-size: {minDownPaneSize};">
     <div bind:this={top} class="top">
         <slot name="top">
             <div style="background-color: red;">
