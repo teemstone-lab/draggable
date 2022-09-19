@@ -8,6 +8,7 @@
   let tempPaneObject = getItemsFromServer()
   let LastPanaType = 'v'
   let LastNum = 4
+  let localStorageLength = localStorage.length
   let SessionNum 
 
   onMount(() => {
@@ -57,7 +58,7 @@
   async function fnsavePattern() {
     await savePattern(paneObject, SessionNum)
     SessionNum += 1
-    paneObject = getItemsFromServer()
+    localStorageLength = localStorage.length
   }
 
   async function handleUpdate(e) {
@@ -81,18 +82,21 @@
   function fnloadPattern(key) {
     paneObject = loadPattern(key)
   }
+
 </script>
 
 <main>
+  {#await localStorageLength then updatedLength}
+  <Topbar {addDialog} {fnloadPattern} {fnsavePattern} localStorageLength={updatedLength}/>
+  {/await}
   {#await paneObject then promiseObject}
-  <Topbar {addDialog} {fnloadPattern} {fnsavePattern}/>
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
       <SplitPane
         paneObject={promiseObject}
         batch="all"
         on:paneUpdateCallback={handleUpdate} 
-        bind:LastNum  
+        bind:LastNum
       />
     </div>    
   </div>

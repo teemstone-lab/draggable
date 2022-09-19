@@ -11,6 +11,8 @@ test('Dialog Add Test', async () => {
   render(App)
 
   const addBtn = await screen.findByTestId('btnAddTest')
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
   const beforeObjs = screen.getAllByRole('dialog')
   const beforeCount = beforeObjs.length
 
@@ -37,10 +39,27 @@ test('Dialog Delete Test', async () => {
   expect(beforeCount - 1).toEqual(afterCount)
 })
 
+test('Dialog Split Test', async () => {
+  render(App)
+
+  const target = await screen.findAllByRole('button', { name: 'Div' })
+  const beforeObjs = screen.getAllByRole('dialog')
+  const beforeCount = beforeObjs.length
+
+  await userEvent.click(target[0])
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const afterObjs = screen.getAllByRole('dialog')
+  const afterCount = afterObjs.length
+  expect(beforeCount + 1).toEqual(afterCount)
+})
+
 test('Pattern Add Localstorage', async () => {
   const results = render(App)
 
   const addBtn = await results.findByTestId('btnAddPattern')
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
   const BtnBefore = results.getAllByRole('button')
   const beforeCount = BtnBefore.length
 
@@ -51,3 +70,5 @@ test('Pattern Add Localstorage', async () => {
   const afterCount = BtnAfter.length
   expect(beforeCount + 1).toEqual(afterCount)
 })
+
+// Drag는 솔직히 Testing Case를 만드는 시간 자체가 더 오래 걸릴 것 같음..
