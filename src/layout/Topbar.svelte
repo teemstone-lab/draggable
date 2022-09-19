@@ -4,14 +4,19 @@
   export let addDialog
   export let fnloadPattern
   export let fnsavePattern
+  export let localStorageLength 
+  
+  let PatternList = []
 
-  const localStorageLength = localStorage.length
-  const PatternList = [
-  ]
-
-  for(let i = 0; i < localStorageLength; i += 1 ){
-    PatternList.push({num: i, key: `pattern${i}`})
+  function updatePatternList(ll) {
+    PatternList = []
+    for(let i = 0; i < ll; i += 1 ){
+      PatternList.push({num: i, key: `pattern${i}`})
+    }
   }
+
+  $: updatePatternList(localStorageLength)
+
 </script>
 
 <div class="topbar">
