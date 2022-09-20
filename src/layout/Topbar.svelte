@@ -2,6 +2,7 @@
   import svelteLogo from '../assets/svelte.svg'
   
   export let addDialog
+  export let fnResetPattern
   export let fnloadPattern
   export let fnsavePattern
   export let localStorageLength 
@@ -27,6 +28,7 @@
     </div>
     <div class="topbar_elements">
         <input type="button" value="Dialog Add" on:click={addDialog} data-testid="btnAddTest"/>
+        <input type="button" value="Reset" on:click={fnResetPattern} data-testid="btnResetPattern"/>
         &nbsp&nbsp&nbsp|  &nbsp&nbsp Pattern &nbsp
         <input type="button" value="Save" on:click={fnsavePattern} data-testid="btnAddPattern"/>
         &nbsp

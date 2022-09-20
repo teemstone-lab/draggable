@@ -2,10 +2,10 @@
   import { onMount } from 'svelte';
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
-  import { getItemsFromServer, saveItemsToServer, savePattern, loadPattern} from './lib/server'
+  import { getCurrentPattern, saveCurrentPattern, savePattern, loadPattern, resetPattern} from './lib/server'
 
-  let paneObject = getItemsFromServer()
-  let tempPaneObject = getItemsFromServer()
+  let paneObject = getCurrentPattern()
+  let tempPaneObject = getCurrentPattern()
   let LastPanaType = 'v'
   let LastNum = 4
   let localStorageLength = localStorage.length
@@ -33,7 +33,7 @@
 	}
 
 	async function addDialog() {
-    const newObject = await getItemsFromServer()
+    const newObject = await getCurrentPattern()
 
 		const RightTopWindow = getRightTopWindow(newObject)
 		if (LastPanaType == 'h') {
@@ -51,8 +51,12 @@
 		LastPanaType = RightTopWindow.type
 		LastNum += 1
     
-    await saveItemsToServer(newObject)    
+    await saveCurrentPattern(newObject)    
     paneObject = newObject
+  }
+
+  async function fnResetPattern() {
+    paneObject = resetPattern()
   }
 
   async function fnsavePattern() {
@@ -65,11 +69,11 @@
     const { obj, completion, source } = e.detail
 
     if (completion) {
-      await saveItemsToServer(obj)
+      await saveCurrentPattern(obj)
       paneObject = obj
       tempPaneObject = { ...obj }
     } else if (source === "Close") {
-      await saveItemsToServer(obj)
+      await saveCurrentPattern(obj)
       paneObject = obj
     } else if (source === "Drag") {
       // Rollback
@@ -87,7 +91,7 @@
 
 <main>
   {#await localStorageLength then updatedLength}
-  <Topbar {addDialog} {fnloadPattern} {fnsavePattern} localStorageLength={updatedLength}/>
+  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} localStorageLength={updatedLength}/>
   {/await}
   {#await paneObject then promiseObject}
   <div id="pane_wrapper" class="wrapper">
