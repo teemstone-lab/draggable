@@ -54,21 +54,21 @@ test('Dialog Split Test', async () => {
   expect(beforeCount + 1).toEqual(afterCount)
 })
 
-test('Pattern Add Localstorage', async () => {
-  const results = render(App)
+// test('Pattern Add', async () => {
+//   const results = render(App)
 
-  const addBtn = await results.findByTestId('btnAddPattern')
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+//   const addBtn = await results.findByTestId('btnAddPattern')
+//   await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  const BtnBefore = results.getAllByRole('button')
-  const beforeCount = BtnBefore.length
+//   const BtnBefore = results.getAllByRole('button')
+//   const beforeCount = BtnBefore.length
 
-  await userEvent.click(addBtn)
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+//   await userEvent.click(addBtn)
+//   await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  const BtnAfter = results.getAllByRole('button')
-  const afterCount = BtnAfter.length
-  expect(beforeCount + 1).toEqual(afterCount)
-})
+//   const BtnAfter = results.getAllByRole('button')
+//   const afterCount = BtnAfter.length
+//   expect(beforeCount + 1).toEqual(afterCount)
+// })
 
 // Drag는 솔직히 Testing Case를 만드는 시간 자체가 더 오래 걸릴 것 같음..

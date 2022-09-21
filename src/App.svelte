@@ -2,20 +2,20 @@
   import { onMount } from 'svelte';
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
-  import { getItemsFromServer, saveItemsToServer, savePattern, loadPattern} from './lib/server'
+  import { getCurrentPattern, saveCurrentPattern, savePattern, loadPattern, resetPattern, loadPatternCount} from './lib/server'
 
-  let paneObject = getItemsFromServer()
-  let tempPaneObject = getItemsFromServer()
+  let paneObject = getCurrentPattern()
+  let tempPaneObject = getCurrentPattern()
   let LastPanaType = 'v'
   let LastNum = 4
-  let localStorageLength = localStorage.length
-  let SessionNum 
+  let patternCount = 0
 
-  onMount(() => {
-    if(localStorage.length === 0){
-      SessionNum = 0;
-    }else{
-      SessionNum = localStorage.length;
+  onMount(async () => {
+    try {
+      const cntResponse = await loadPatternCount()
+      patternCount = parseInt(cntResponse as string, 10)
+    } catch {
+      patternCount = 0
     }
   })
 
@@ -33,7 +33,7 @@
 	}
 
 	async function addDialog() {
-    const newObject = await getItemsFromServer()
+    const newObject = await getCurrentPattern()
 
 		const RightTopWindow = getRightTopWindow(newObject)
 		if (LastPanaType == 'h') {
@@ -51,32 +51,37 @@
 		LastPanaType = RightTopWindow.type
 		LastNum += 1
     
-    await saveItemsToServer(newObject)    
-    paneObject = newObject
+    await saveCurrentPattern(newObject)    
+    paneObject = Promise.resolve(newObject)
+  }
+
+  async function fnResetPattern() {
+    paneObject = resetPattern()
+    const obj = await paneObject
+    await saveCurrentPattern(obj)
   }
 
   async function fnsavePattern() {
-    await savePattern(paneObject, SessionNum)
-    SessionNum += 1
-    localStorageLength = localStorage.length
+    const obj = await paneObject
+    await savePattern(obj, patternCount)
+    patternCount += 1
   }
 
   async function handleUpdate(e) {
     const { obj, completion, source } = e.detail
 
     if (completion) {
-      await saveItemsToServer(obj)
-      paneObject = obj
+      await saveCurrentPattern(obj)
+      paneObject = Promise.resolve(obj)
       tempPaneObject = { ...obj }
     } else if (source === "Close") {
-      await saveItemsToServer(obj)
-      paneObject = obj
+      await saveCurrentPattern(obj)
+      paneObject = Promise.resolve(obj)
     } else if (source === "Drag") {
       // Rollback
-      paneObject = tempPaneObject
+      paneObject = Promise.resolve(tempPaneObject)
     }
 
-    console.log(paneObject)
   }
 
   function fnloadPattern(key) {
@@ -86,9 +91,9 @@
 </script>
 
 <main>
-  {#await localStorageLength then updatedLength}
-  <Topbar {addDialog} {fnloadPattern} {fnsavePattern} localStorageLength={updatedLength}/>
-  {/await}
+  <!-- {#await localStorageLength then updatedLength} -->
+  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {patternCount}/>
+  <!-- {/await} -->
   {#await paneObject then promiseObject}
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
