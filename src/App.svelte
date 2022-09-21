@@ -11,9 +11,12 @@
   let patternCount = 0
 
   onMount(async () => {
-    const cnt_response = await loadPatternCount()
-    patternCount = parseInt(cnt_response as string, 10)
-    console.log(patternCount)
+    try {
+      const cntResponse = await loadPatternCount()
+      patternCount = parseInt(cntResponse as string, 10)
+    } catch {
+      patternCount = 0
+    }
   })
 
   function getRightTopWindow(SplitObject){
