@@ -24,17 +24,32 @@ export function loadPattern(key) {
   })
 }
 
-export function savePattern(newItems, SessionNum) {
+export function loadPatternCount() {
+  return new Promise((resolve) => {
+    fetch(`${HOSTNAME}/getPane/count`, {
+      method: 'GET'
+    })
+      .then((response) => {
+        resolve(response.text())
+      })
+      .catch((error) => {
+        console.log(`load count API Error: ${error}`)
+        resolve('')
+      })
+  })
+}
+
+export function savePattern(newItems, patternNumber) {
   return new Promise((resolve) => {
     window.setTimeout(() => {
       const jsonStrItem = JSON.stringify(newItems)
-      fetch(`${HOSTNAME}/`, {
+      fetch(`${HOSTNAME}/setPane`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          number: SessionNum,
+          number: patternNumber,
           data: jsonStrItem
         })
       })

@@ -2,21 +2,18 @@
   import { onMount } from 'svelte';
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
-  import { getCurrentPattern, saveCurrentPattern, savePattern, loadPattern, resetPattern} from './lib/server'
+  import { getCurrentPattern, saveCurrentPattern, savePattern, loadPattern, resetPattern, loadPatternCount} from './lib/server'
 
   let paneObject = getCurrentPattern()
   let tempPaneObject = getCurrentPattern()
   let LastPanaType = 'v'
   let LastNum = 4
-  let localStorageLength = localStorage.length
-  let SessionNum 
+  let patternCount = 0
 
-  onMount(() => {
-    if(localStorage.length === 0){
-      SessionNum = 0;
-    }else{
-      SessionNum = localStorage.length;
-    }
+  onMount(async () => {
+    const cnt_response = await loadPatternCount()
+    patternCount = parseInt(cnt_response as string, 10)
+    console.log(patternCount)
   })
 
   function getRightTopWindow(SplitObject){
@@ -52,17 +49,19 @@
 		LastNum += 1
     
     await saveCurrentPattern(newObject)    
-    paneObject = newObject
+    paneObject = Promise.resolve(newObject)
   }
 
   async function fnResetPattern() {
     paneObject = resetPattern()
+    const obj = await paneObject
+    await saveCurrentPattern(obj)
   }
 
   async function fnsavePattern() {
-    await savePattern(paneObject, SessionNum)
-    SessionNum += 1
-    localStorageLength = localStorage.length
+    const obj = await paneObject
+    await savePattern(obj, patternCount)
+    patternCount += 1
   }
 
   async function handleUpdate(e) {
@@ -70,17 +69,16 @@
 
     if (completion) {
       await saveCurrentPattern(obj)
-      paneObject = obj
+      paneObject = Promise.resolve(obj)
       tempPaneObject = { ...obj }
     } else if (source === "Close") {
       await saveCurrentPattern(obj)
-      paneObject = obj
+      paneObject = Promise.resolve(obj)
     } else if (source === "Drag") {
       // Rollback
-      paneObject = tempPaneObject
+      paneObject = Promise.resolve(tempPaneObject)
     }
 
-    console.log(paneObject)
   }
 
   function fnloadPattern(key) {
@@ -90,9 +88,9 @@
 </script>
 
 <main>
-  {#await localStorageLength then updatedLength}
-  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} localStorageLength={updatedLength}/>
-  {/await}
+  <!-- {#await localStorageLength then updatedLength} -->
+  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {patternCount}/>
+  <!-- {/await} -->
   {#await paneObject then promiseObject}
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">

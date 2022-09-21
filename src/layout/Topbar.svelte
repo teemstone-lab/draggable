@@ -5,7 +5,7 @@
   export let fnResetPattern
   export let fnloadPattern
   export let fnsavePattern
-  export let localStorageLength 
+  export let patternCount 
   
   let PatternList = []
 
@@ -16,7 +16,7 @@
     }
   }
 
-  $: updatePatternList(localStorageLength)
+  $: updatePatternList(patternCount)
 
 </script>
 
