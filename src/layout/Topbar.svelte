@@ -5,18 +5,26 @@
   export let fnResetPattern
   export let fnloadPattern
   export let fnsavePattern
-  export let patternCount 
+  export let paneIndex
   
-  let PatternList = []
+  const patternCount = 5
+  const PatternList = []
+  let pidx = -1
 
-  function updatePatternList(ll) {
-    PatternList = []
-    for(let i = 0; i < ll; i += 1 ){
-      PatternList.push({num: i, key: `pattern${i}`})
-    }
+  for(let i = 0; i < patternCount; i += 1 ){
+    PatternList.push({
+      num: i,
+      active: false
+    })
+  }    
+
+  function updatePatternList(idx) {
+    if (pidx > -1) PatternList[pidx].active = false
+    if (idx > -1) PatternList[idx].active = true
+    pidx = idx
   }
 
-  $: updatePatternList(patternCount)
+  $: updatePatternList(paneIndex)
 
 </script>
 
@@ -32,8 +40,20 @@
         &nbsp&nbsp&nbsp|  &nbsp&nbsp Pattern &nbsp
         <input type="button" value="Save" on:click={fnsavePattern} data-testid="btnAddPattern"/>
         &nbsp
-        {#each PatternList as item, idx (item.num)}
-            <input type="button" value={item.num} on:click={fnloadPattern(item.key)}/>
+        {#each PatternList as item (item.num)}
+            <input type="button" value={item.num} on:click={fnloadPattern(item.num)} class:activeButton={item.active}/>
         {/each}
     </div>
 </div>
+
+<style>
+  input { 
+    cursor: pointer;
+  }
+
+  .activeButton {
+    background: #0000AA;
+    color: #FFF;
+    cursor: initial;
+  }
+</style>

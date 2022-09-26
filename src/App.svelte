@@ -2,22 +2,21 @@
   import { onMount } from 'svelte';
   import Topbar from './layout/Topbar.svelte'
   import SplitPane from './lib/SplitPane.svelte'
-  import { getCurrentPattern, saveCurrentPattern, savePattern, loadPattern, resetPattern, loadPatternCount} from './lib/server'
+  import { getCurrentPattern, setCurrentPattern, savePattern, loadPattern, resetPattern } from './lib/server'
 
-  let paneObject = getCurrentPattern()
-  let tempPaneObject = getCurrentPattern()
+  let paneIndex = -1
+  let currentPattern = getCurrentPattern()
+  let tempPattern
+
   let LastPanaType = 'v'
-  let LastNum = 4
-  let patternCount = 0
+  let LastNum = 4  
 
   onMount(async () => {
-    try {
-      const cntResponse = await loadPatternCount()
-      patternCount = parseInt(cntResponse as string, 10)
-    } catch {
-      patternCount = 0
-    }
+    tempPattern = currentPattern
+    const ptnData = await currentPattern
+    paneIndex = ptnData.idx    
   })
+
 
   function getRightTopWindow(SplitObject){
 		let ReturnValue
@@ -33,72 +32,94 @@
 	}
 
 	async function addDialog() {
-    const newObject = await getCurrentPattern()
+    const ptnData = await currentPattern
 
-		const RightTopWindow = getRightTopWindow(newObject)
+		const rightTopWindow = getRightTopWindow(ptnData.pattern)
 		if (LastPanaType == 'h') {
-			RightTopWindow.type = 'v'
-      RightTopWindow.axis = ['50%', '50%']
-			RightTopWindow.top = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
-			RightTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
+			rightTopWindow.type = 'v'
+      rightTopWindow.axis = ['50%', '50%']
+			rightTopWindow.top = {type: 'c', text: rightTopWindow.text, title: rightTopWindow.text, id: rightTopWindow.id}
+			rightTopWindow.down = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 			
 		} else {
-			RightTopWindow.type = 'h'
-      RightTopWindow.axis = ['50%', '50%']
-			RightTopWindow.left = {type: 'c', text: RightTopWindow.text, title: RightTopWindow.text, id: RightTopWindow.id}
-			RightTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
+			rightTopWindow.type = 'h'
+      rightTopWindow.axis = ['50%', '50%']
+			rightTopWindow.left = {type: 'c', text: rightTopWindow.text, title: rightTopWindow.text, id: rightTopWindow.id}
+			rightTopWindow.right = {type: 'c', text: `Dialog ${LastNum}`, title: `Dialog ${LastNum}`, id: `d${LastNum}`}
 		}
-		LastPanaType = RightTopWindow.type
+		LastPanaType = rightTopWindow.type
 		LastNum += 1
     
-    await saveCurrentPattern(newObject)    
-    paneObject = Promise.resolve(newObject)
+    const pattern = {
+      idx: paneIndex,
+      pattern: ptnData.pattern
+    }
+
+    await setCurrentPattern(pattern)
+    currentPattern = Promise.resolve(pattern)
   }
 
   async function fnResetPattern() {
-    paneObject = resetPattern()
-    const obj = await paneObject
-    await saveCurrentPattern(obj)
-  }
-
-  async function fnsavePattern() {
-    const obj = await paneObject
-    await savePattern(obj, patternCount)
-    patternCount += 1
+    currentPattern = resetPattern(paneIndex)
+    const obj = await currentPattern
+    await setCurrentPattern({
+      idx: paneIndex,
+      pattern: obj.pattern
+    })
   }
 
   async function handleUpdate(e) {
     const { obj, completion, source } = e.detail
+    const pattern = {
+      idx: paneIndex,
+      pattern: obj
+    }
 
     if (completion) {
-      await saveCurrentPattern(obj)
-      paneObject = Promise.resolve(obj)
-      tempPaneObject = { ...obj }
+      await setCurrentPattern(pattern)
+      currentPattern = Promise.resolve(pattern)
+      tempPattern = Promise.resolve(pattern)
     } else if (source === "Close") {
-      await saveCurrentPattern(obj)
-      paneObject = Promise.resolve(obj)
+      await setCurrentPattern(pattern)
+      currentPattern = Promise.resolve(pattern)
     } else if (source === "Drag") {
       // Rollback
-      paneObject = Promise.resolve(tempPaneObject)
+      currentPattern = Promise.resolve(tempPattern)
     }
 
   }
 
-  function fnloadPattern(key) {
-    paneObject = loadPattern(key)
+  async function fnloadPattern(key) {
+    paneIndex = key
+    const ptnData = await currentPattern
+
+    try {
+      const pattern = await loadPattern(key)
+      const newPattern = {
+        idx: key,
+        pattern
+      }
+      currentPattern = Promise.resolve(newPattern)
+      await setCurrentPattern(newPattern)
+    } catch {
+      await savePattern(ptnData.pattern, key)
+    }
+  }
+
+  async function fnsavePattern() {
+    const ptnData = await currentPattern
+    await savePattern(ptnData.pattern, paneIndex)
   }
 
 </script>
 
 <main>
-  <!-- {#await localStorageLength then updatedLength} -->
-  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {patternCount}/>
-  <!-- {/await} -->
-  {#await paneObject then promiseObject}
+  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} />
+  {#await currentPattern then promisePattern}
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
       <SplitPane
-        paneObject={promiseObject}
+        paneObject={promisePattern.pattern}
         batch="all"
         on:paneUpdateCallback={handleUpdate} 
         bind:LastNum

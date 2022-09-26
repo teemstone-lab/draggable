@@ -1,7 +1,7 @@
 const NETWORK_DELAY_MS = 100
 const CURRENT_KEY = 'CurrentPattern'
 const HOSTNAME = 'http://localhost:8000'
-const initServerItems = {
+const initPattern = {
   type: 'h',
   axis: ['50%', '50%'],
   left: { type: 'c', text: 'Dialog 1', title: 'Dialog 1', id: 'd1' },
@@ -12,30 +12,25 @@ const initServerItems = {
     down: { type: 'c', text: 'Dialog 3', title: 'Dialog 3', id: 'd3' }
   }
 }
-let serverItems
+let currentPattern: PatternType
+
+interface PatternType {
+  idx: number
+  pattern: unknown
+}
 
 export function loadPattern(key) {
   return new Promise((resolve) => {
     window.setTimeout(() => {
-      const PatternData = JSON.parse(localStorage.getItem(key))
-      serverItems = { ...PatternData }
-      resolve(PatternData)
+      fetch(`${HOSTNAME}/getPane/${key}`, {
+        method: 'POST'
+      })
+        .then((response) => resolve(response.json()))
+        .catch((error) => {
+          console.log(error)
+          resolve({})
+        })
     }, NETWORK_DELAY_MS)
-  })
-}
-
-export function loadPatternCount() {
-  return new Promise((resolve) => {
-    fetch(`${HOSTNAME}/getPane/count`, {
-      method: 'GET'
-    })
-      .then((response) => {
-        resolve(response.text())
-      })
-      .catch((error) => {
-        console.log(`load count API Error: ${error}`)
-        resolve('')
-      })
   })
 }
 
@@ -53,48 +48,53 @@ export function savePattern(newItems, patternNumber) {
           data: jsonStrItem
         })
       })
-        .then((response) => {
-          console.log(response)
-        })
+        .then((response) => resolve(response))
         .catch((error) => {
           console.log(`save API Error: ${error}`)
         })
-      resolve(serverItems)
+      resolve(currentPattern)
     }, NETWORK_DELAY_MS)
   })
 }
 
-export function saveCurrentPattern(newItems) {
+export function setCurrentPattern(newPattern) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      serverItems = { ...newItems }
-      localStorage.setItem(CURRENT_KEY, JSON.stringify(serverItems))
-      resolve(newItems)
+      currentPattern = { ...newPattern }
+      localStorage.setItem(CURRENT_KEY, JSON.stringify(currentPattern))
+      resolve(currentPattern)
     }, NETWORK_DELAY_MS)
   })
 }
 
 export function getCurrentPattern() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
+  return new Promise<PatternType>((resolve) => {
+    setTimeout(async () => {
       const lsData = localStorage.getItem(CURRENT_KEY)
 
       if (lsData) {
-        const PatternData = JSON.parse(lsData)
-        serverItems = { ...PatternData }
+        const patternData = JSON.parse(lsData)
+        currentPattern = { ...patternData }
       } else {
-        serverItems = { ...initServerItems }
+        currentPattern = {
+          idx: 0,
+          pattern: initPattern
+        }
+        await setCurrentPattern(currentPattern)
       }
-      resolve(serverItems)
+      resolve(currentPattern)
     }, NETWORK_DELAY_MS)
   })
 }
 
-export function resetPattern() {
-  return new Promise((resolve) => {
+export function resetPattern(patternNumber) {
+  return new Promise<PatternType>((resolve) => {
     setTimeout(() => {
-      serverItems = { ...initServerItems }
-      resolve(serverItems)
+      currentPattern = {
+        idx: patternNumber,
+        pattern: initPattern
+      }
+      resolve(currentPattern)
     }, NETWORK_DELAY_MS)
   })
 }
