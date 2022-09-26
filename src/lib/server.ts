@@ -1,6 +1,6 @@
 const NETWORK_DELAY_MS = 100
 const CURRENT_KEY = 'CurrentPattern'
-const HOSTNAME = 'http://localhost:8000'
+const HOSTNAME = 'http://192.168.0.58:8000'
 const initPattern = {
   type: 'h',
   axis: ['50%', '50%'],
