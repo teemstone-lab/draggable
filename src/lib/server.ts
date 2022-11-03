@@ -1,4 +1,4 @@
-const NETWORK_DELAY_MS = 100
+const NETWORK_DELAY_MS = 2
 const CURRENT_KEY = 'CurrentPattern'
 const HOSTNAME = 'http://localhost:8000'
 const initPattern = {
@@ -63,6 +63,16 @@ export function setCurrentPattern(newPattern) {
       currentPattern = { ...newPattern }
       localStorage.setItem(CURRENT_KEY, JSON.stringify(currentPattern))
       resolve(currentPattern)
+    }, NETWORK_DELAY_MS)
+  })
+}
+
+export function setInitPattern(newPattern) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      let PatternData = { ...newPattern }
+      sessionStorage.setItem("ptdata" + String(newPattern.idx), JSON.stringify(PatternData));
+      resolve(PatternData)
     }, NETWORK_DELAY_MS)
   })
 }
