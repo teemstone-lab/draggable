@@ -67,7 +67,7 @@
         resetSize();
     }
     onMount(() => {
-        window.addEventListener('resize', onResize);
+        //window.addEventListener('resize', onResize);
     });
     onDestroy(() => {
         window.removeEventListener('resize', onResize);

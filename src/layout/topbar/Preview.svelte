@@ -12,7 +12,7 @@
     $: activeButtonPanelStyle = item.active ? "hidden" : "visible"
 </script>
 
-<div class="previewWrapper" style={activeButtonStyle} on:click={fnloadPattern(item.num)}>{item.num}
+<div class="previewWrapper" style={activeButtonStyle} on:mousedown={fnloadPattern(item.num)}>{item.num}
   <span class="previewPanel" style="--panel-visibility: {activeButtonPanelStyle}">
     <span class="previewImageWrapper"><PreviewImage {paneObject} /></span>
   </span>
