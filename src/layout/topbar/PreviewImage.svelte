@@ -1,6 +1,5 @@
 <script>
     import HSplitPreview from "./HSplitPreview.svelte"
-    import PreviewDialog from "./PreviewDialog.svelte"
     import VSplitPreview from "./VSplitPreview.svelte"
 
     export let paneObject
@@ -11,7 +10,7 @@
     <left slot="left">
     {#if paneObject.left}
         {#if paneObject.left.type === 'c'}
-        <PreviewDialog paneObject={paneObject.left} />
+        <div />
         {:else}
         <svelte:self paneObject={paneObject.left} />
         {/if}
@@ -20,7 +19,7 @@
     <right slot="right">
     {#if paneObject.right}
         {#if paneObject.right.type === 'c'}
-        <PreviewDialog paneObject={paneObject.right} />
+        <div />
         {:else}
         <svelte:self paneObject={paneObject.right} />
         {/if}
@@ -32,7 +31,7 @@
     <top slot="top">
     {#if paneObject.top}
         {#if paneObject.top.type === 'c'}
-        <PreviewDialog paneObject={paneObject.top} />
+        <div />
         {:else}
         <svelte:self paneObject={paneObject.top} />
         {/if}
@@ -41,7 +40,7 @@
     <down slot="down">
     {#if paneObject.down}
         {#if paneObject.down.type === 'c'}
-        <PreviewDialog paneObject={paneObject.down} />
+        <div />
         {:else}
         <svelte:self paneObject={paneObject.down} />
         {/if}
@@ -49,7 +48,7 @@
     </down>
 </VSplitPreview>
 {:else}
-<PreviewDialog bind:paneObject />
+<div />
 {/if}
 
 <style>
