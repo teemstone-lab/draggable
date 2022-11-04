@@ -7,9 +7,9 @@
   export let fnloadPattern
   export let fnsavePattern
   export let paneIndex
-  export let paneObject
+  export let patternCount
+  export let patternArray
   
-  const patternCount = 5
   const PatternList = []
   let pidx = -1
 
@@ -25,8 +25,8 @@
     if (idx > -1) PatternList[idx].active = true
     pidx = idx
   }
-
-  $: updatePatternList(paneIndex)
+  
+  $: updatePatternList(paneIndex)  
 
 </script>
 
@@ -43,7 +43,7 @@
         <input type="button" value="Save" on:click={fnsavePattern} data-testid="btnAddPattern"/>
         &nbsp
         {#each PatternList as item (item.num)}
-            <Preview {item} {paneObject} {fnloadPattern} />
+          <Preview {item} {fnloadPattern} paneObject={patternArray[item.num]} />
         {/each}
     </div>
 </div>
