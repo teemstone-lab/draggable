@@ -70,8 +70,11 @@ export function setCurrentPattern(newPattern) {
 export function setInitPattern(newPattern) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      let PatternData = { ...newPattern }
-      sessionStorage.setItem("ptdata" + String(newPattern.idx), JSON.stringify(PatternData));
+      const PatternData = { ...newPattern }
+      sessionStorage.setItem(
+        `ptdata${String(newPattern.idx)}`,
+        JSON.stringify(PatternData)
+      )
       resolve(PatternData)
     }, NETWORK_DELAY_MS)
   })
