@@ -35,23 +35,22 @@ body, main, #app {
 }
 
 div.topbar {
-  display: flex;
-  overflow: hidden;
+  display: block;
+  overflow: visible;
   align-items: center;
   color: white;
   background: #334433;
   height: 50px;
   width: 100%;
-  padding: 0 15px;
+  padding: 7px 15px 0 0;
   position: relative;
-  z-index: 1000;
+  z-index: 100;
 }
 
 div.topbar_elements {
-  display: flex;
-  height: 50px;
-  align-items: center;
-  -webkit-box-align: center;
+  display: inline-block;
+  height: 36px;
+  vertical-align: middle;
   margin: 0 10px;
 }
 

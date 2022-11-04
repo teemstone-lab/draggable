@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import Topbar from './layout/Topbar.svelte'
-  import SplitPane from './lib/SplitPane.svelte'
+  import Topbar from './layout/topbar/Topbar.svelte'
+  import SplitPane from './layout/pane/SplitPane.svelte'
   import { getCurrentPattern, setCurrentPattern, savePattern, loadPattern, resetPattern, setInitPattern } from './lib/server'
 
   let paneIndex = -1
@@ -133,8 +133,8 @@
 </script>
 
 <main>
-  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} />
   {#await currentPattern then promisePattern}
+  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} paneObject={promisePattern.pattern}/>
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
       <SplitPane

@@ -1,11 +1,13 @@
 <script lang="ts">
-  import svelteLogo from '../assets/svelte.svg'
-  
+  import svelteLogo from '../../assets/svelte.svg'
+  import Preview from './Preview.svelte'
+
   export let addDialog
   export let fnResetPattern
   export let fnloadPattern
   export let fnsavePattern
   export let paneIndex
+  export let paneObject
   
   const patternCount = 5
   const PatternList = []
@@ -41,7 +43,7 @@
         <input type="button" value="Save" on:click={fnsavePattern} data-testid="btnAddPattern"/>
         &nbsp
         {#each PatternList as item (item.num)}
-            <input type="button" value={item.num} on:click={fnloadPattern(item.num)} class:activeButton={item.active}/>
+            <Preview {item} {paneObject} {fnloadPattern} />
         {/each}
     </div>
 </div>
@@ -49,11 +51,5 @@
 <style>
   input { 
     cursor: pointer;
-  }
-
-  .activeButton {
-    background: #0000AA;
-    color: #FFF;
-    cursor: initial;
   }
 </style>
