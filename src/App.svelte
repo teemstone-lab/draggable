@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import Topbar from './layout/topbar/Topbar.svelte'
   import SplitPane from './layout/pane/SplitPane.svelte'
-  import { getCurrentPattern, setCurrentPattern, savePattern, loadPattern, resetPattern } from './lib/server'
+  import { getCurrentPattern, setCurrentPattern, savePattern, loadPattern, resetPattern, setInitPattern } from './lib/server'
 
   let paneIndex = -1
   let currentPattern = getCurrentPattern()
@@ -15,7 +15,26 @@
     tempPattern = currentPattern
     const ptnData = await currentPattern
     paneIndex = ptnData.idx    
+
+    fnInitPattern();
+
   })
+
+  async function fnInitPattern() {
+    try {
+      for (let i = 0; i<5; i++){
+        const pattern = await loadPattern(i)
+        //let temp = JSON.stringify({ ...pattern });
+        const newPattern = {
+        idx: i,
+        pattern
+        }
+        await setInitPattern(newPattern)
+      }
+    } catch {
+      alert('Pattern Init Fail!!')
+    }
+  }
 
 
   function getRightTopWindow(SplitObject){
