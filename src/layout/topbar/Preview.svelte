@@ -1,15 +1,19 @@
-<script lang="ts">
+<script lang="ts">   
     import PreviewImage from "./PreviewImage.svelte"
+    
+    let activeButtonPanelStyle;
+    let activeButtonStyle;
 
     export let item
     export let paneObject
     export let fnloadPattern
 
     $: activeButtonStyle = item.active ? "background: #0000AA; cursor: initial;" : "background: #888; cursor: pointer;"
+    $: activeButtonPanelStyle = item.active ? "hidden" : "visible"
 </script>
 
 <div class="previewWrapper" style={activeButtonStyle} on:click={fnloadPattern(item.num)}>{item.num}
-  <span class="previewPanel">
+  <span class="previewPanel" style="--panel-visibility: {activeButtonPanelStyle}">
     <span class="previewImageWrapper"><PreviewImage {paneObject} /></span>
   </span>
 </div>
@@ -39,7 +43,7 @@
   }
 
   .previewWrapper:hover .previewPanel {
-    visibility: visible;
+    visibility: var(--panel-visibility);
     opacity: 1;
   }
 

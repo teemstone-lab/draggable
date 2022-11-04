@@ -7,6 +7,8 @@
   let paneIndex = -1
   let currentPattern = getCurrentPattern()
   let tempPattern
+  let patternArray = []
+  const patternCount = 5
 
   let LastPanaType = 'v'
   let LastNum = 4  
@@ -14,28 +16,27 @@
   onMount(async () => {
     tempPattern = currentPattern
     const ptnData = await currentPattern
-    paneIndex = ptnData.idx    
-
-    fnInitPattern();
-
+    paneIndex = ptnData.idx
+    await fnInitPattern()
   })
 
   async function fnInitPattern() {
     try {
-      for (let i = 0; i<5; i++){
-        const pattern = await loadPattern(i)
-        //let temp = JSON.stringify({ ...pattern });
-        const newPattern = {
-        idx: i,
-        pattern
-        }
-        await setInitPattern(newPattern)
-      }
+      patternArray = await Promise.all(
+        Array.from({length:patternCount}, (_,i)=>i).map(async (i) => {
+          const pattern = await loadPattern(i)
+          const newPattern = {
+            idx: i,
+            pattern
+          }
+          await setInitPattern(newPattern)
+          return newPattern.pattern
+        })
+      )      
     } catch {
-      alert('Pattern Init Fail!!')
+      console.log('Pattern Init Fail!!')
     }
   }
-
 
   function getRightTopWindow(SplitObject){
 		let ReturnValue
@@ -128,13 +129,14 @@
   async function fnsavePattern() {
     const ptnData = await currentPattern
     await savePattern(ptnData.pattern, paneIndex)
+    patternArray[paneIndex] = ptnData.pattern
   }
 
 </script>
 
 <main>
   {#await currentPattern then promisePattern}
-  <Topbar {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} paneObject={promisePattern.pattern}/>
+  <Topbar {patternArray} {patternCount} {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} />
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
       <SplitPane
