@@ -17,7 +17,7 @@
     tempPattern = currentPattern
     const ptnData = await currentPattern
     paneIndex = ptnData.idx
-    fnInitPattern()
+    await fnInitPattern()
   })
 
   async function fnInitPattern() {
@@ -34,7 +34,7 @@
         })
       )      
     } catch {
-      alert('Pattern Init Fail!!')
+      console.log('Pattern Init Fail!!')
     }
   }
 
@@ -135,10 +135,8 @@
 </script>
 
 <main>
-  {#await patternArray then pArray}
-  <Topbar patternArray={pArray} {patternCount} {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} />
-  {/await}
   {#await currentPattern then promisePattern}
+  <Topbar {patternArray} {patternCount} {addDialog} {fnResetPattern} {fnloadPattern} {fnsavePattern} {paneIndex} />
   <div id="pane_wrapper" class="wrapper">
     <div class="pane_root">
       <SplitPane

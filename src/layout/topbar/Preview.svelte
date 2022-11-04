@@ -1,5 +1,8 @@
-<script lang="ts">
+<script lang="ts">   
     import PreviewImage from "./PreviewImage.svelte"
+    
+    let activeButtonPanelStyle;
+    let activeButtonStyle;
 
     export let item
     export let paneObject
