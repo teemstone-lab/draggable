@@ -129,6 +129,7 @@
     const ptnData = await currentPattern
     await savePattern(ptnData.pattern, paneIndex)
     patternArray[paneIndex] = ptnData.pattern
+    window.alert('Save complete')
   }
 
 </script>
