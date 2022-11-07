@@ -111,17 +111,16 @@
 
   async function fnloadPattern(key) {
     paneIndex = key
-    const ptnData = await currentPattern
 
     try {
-      const pattern = await loadPattern(key)
       const newPattern = {
         idx: key,
-        pattern
+        pattern: patternArray[key]
       }
       currentPattern = Promise.resolve(newPattern)
       await setCurrentPattern(newPattern)
     } catch {
+      const ptnData = await currentPattern
       await savePattern(ptnData.pattern, key)
     }
   }
